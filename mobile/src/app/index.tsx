@@ -34,7 +34,10 @@ export default function InvitationsScreen() {
               )}
               {invitations && invitations.length > 0 && (
                 <ScrollView>
-                  <VStack space={4}>
+                  <VStack
+                    space={4}
+                    marginBottom={16}
+                  >
                     {invitations.map((invitation, index) => (
                       <InvitationCell
                         key={index}
