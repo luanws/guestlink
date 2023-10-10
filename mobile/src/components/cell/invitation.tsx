@@ -14,7 +14,7 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
   return (
     <TouchableOpacity
       onPress={() => onPress?.(invitation)}
-      activeOpacity={0.7}
+      activeOpacity={onPress ? 0.7 : 1}
     >
       <VStack
         space={1}
