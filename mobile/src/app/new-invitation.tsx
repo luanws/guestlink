@@ -1,9 +1,11 @@
+import { router } from 'expo-router'
 import { Button, Center, Icon, Image, Input, Pressable, ScrollView, Toast, VStack } from 'native-base'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
 import { ExpoIcon } from '../components/ui/expo-icon'
 import { InputIcon } from '../components/ui/input-icon'
+import { InvitationService } from '../services/invitation'
 import { selectImage } from '../utils/image'
 
 const newInvitationSchema = z.object({
@@ -29,7 +31,8 @@ export default function () {
   async function handleSubmit(data: NewInvitationForm) {
     try {
       newInvitationSchema.parse(data)
-      console.log(data)
+      await InvitationService.setInvitation(data)
+      router.back()
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.issues.map(issue => issue.message).join('\n')

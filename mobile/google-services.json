@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "308707899828",
+    "project_id": "invitation-maker-ee874",
+    "storage_bucket": "invitation-maker-ee874.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308707899828:android:45d342d2ca4f008eef5ae1",
+        "android_client_info": {
+          "package_name": "com.luanws.invitationmaker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHt3QO3JLSzOT2HZ4qGidxPXVMLP0K5wY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

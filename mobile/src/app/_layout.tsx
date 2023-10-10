@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router'
+import '../config/firebase'
 import { AppProvider } from './app-provider'
 
 export default function Layout() {
