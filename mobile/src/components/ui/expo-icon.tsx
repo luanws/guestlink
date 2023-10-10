@@ -4,6 +4,7 @@ import {
   EvilIcons,
   Feather,
   FontAwesome,
+  FontAwesome5,
   Fontisto,
   Foundation,
   Ionicons,
@@ -55,9 +56,9 @@ type SimpleLineIconsNameWithPrefix = `SimpleLineIcons/${SimpleLineIconsName}`
 type ZocialName = keyof typeof Zocial.glyphMap
 type ZocialNameWithPrefix = `Zocial/${ZocialName}`
 
+type FontAwesome5NameWithPrefix = `FontAwesome5/${string}`
 
-interface ExpoIconProps {
-  name:
+export type ExpoIconName =
   | AntDesignNameWithPrefix
   | EntypoNameWithPrefix
   | EvilIconsNameWithPrefix
@@ -71,6 +72,10 @@ interface ExpoIconProps {
   | OcticonsNameWithPrefix
   | SimpleLineIconsNameWithPrefix
   | ZocialNameWithPrefix
+  | FontAwesome5NameWithPrefix
+
+interface ExpoIconProps {
+  name: ExpoIconName
   size?: number
   color?: string
   style?: StyleProp<TextStyle>
@@ -91,6 +96,8 @@ const getIcon = (icon: string, size: number, color: string, style: StyleProp<Tex
       return <Fontisto style={style} name={name} size={size} color={color} />
     case 'FontAwesome':
       return <FontAwesome style={style} name={name} size={size} color={color} />
+    case 'FontAwesome5':
+      return <FontAwesome5 style={style} name={name} size={size} color={color} />
     case 'Foundation':
       return <Foundation style={style} name={name} size={size} color={color} />
     case 'Ionicons':
