@@ -1,15 +1,31 @@
-import { Link } from 'expo-router'
-import React from 'react'
-import { View, Text } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { router } from 'expo-router'
+import { Fab, Heading, Icon, ScrollView, Text, VStack } from 'native-base'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-// import styles from './styles'
+export default function InvitationsScreen() {
 
-export default function IndexScreen() {
   return (
-    <View>
-      <Link href='/profile'>
-        <Text>Index</Text>
-      </Link>
-    </View>
+    <>
+      <SafeAreaView>
+        <ScrollView>
+          <VStack padding={8}>
+            <Heading>Convites</Heading>
+            <VStack>
+              <Text>Você não possui convites</Text>
+            </VStack>
+          </VStack>
+        </ScrollView>
+      </SafeAreaView>
+      <Fab
+        renderInPortal={false}
+        right={4}
+        bottom={4}
+        icon={<Icon as={<MaterialIcons name='add' />} size={6} />}
+        onPress={() => {
+          router.push('/new-invitation')
+        }}
+      />
+    </>
   )
 }

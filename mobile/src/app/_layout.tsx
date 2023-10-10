@@ -1,27 +1,26 @@
-import { MaterialIcons } from '@expo/vector-icons'
-import { Tabs } from 'expo-router'
+import { Stack } from 'expo-router'
+import { AppProvider } from './app-provider'
 
-export default function TabsScreen() {
+export default function Layout() {
   return (
-    <Tabs>
-      <Tabs.Screen
-        name='index'
-        options={{
-          title: 'Início',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name='home' size={size} color={color} />
-          )
-        }}
-      />
-      <Tabs.Screen
-        name='profile'
-        options={{
-          title: 'Perfil',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name='person' size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+    <AppProvider>
+      <Stack>
+        <Stack.Screen
+          name='index'
+          options={{
+            title: 'Convites',
+            animation: 'fade_from_bottom',
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name='new-invitation'
+          options={{
+            title: 'Novo convite',
+            animation: 'fade_from_bottom'
+          }}
+        />
+      </Stack>
+    </AppProvider>
   )
 }
