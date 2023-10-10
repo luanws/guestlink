@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.luanws.invitationmaker"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -33,6 +34,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "35ff00fa-ba1c-4dbf-86c3-8f6d8e4fc60b"
+      }
+    }
   }
 }
