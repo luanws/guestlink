@@ -1,4 +1,4 @@
-import { HStack, Icon, Image, Text, VStack } from 'native-base'
+import { HStack, Icon, IconButton, Image, Text, VStack } from 'native-base'
 import { TouchableOpacity } from 'react-native'
 import { Invitation } from '../../models/invitation'
 import { ExpoIcon } from '../ui/expo-icon'
@@ -10,6 +10,10 @@ interface InvitationCellProps {
 
 export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
   const { name, address, date, eventName, imageBase64, time } = invitation
+
+  function handleShare() {
+    console.log(eventName, name)
+  }
 
   return (
     <TouchableOpacity
@@ -36,8 +40,17 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
           space={1}
         >
 
-          <Text fontSize='md' color='primary.700'>{eventName}</Text>
-          <Text fontSize='sm' color='secondary.700'>{name}</Text>
+          <HStack justifyContent='space-between' alignItems='flex-start'>
+            <VStack>
+              <Text fontSize='md' color='primary.700'>{eventName}</Text>
+              <Text fontSize='sm' color='secondary.700'>{name}</Text>
+            </VStack>
+            <IconButton
+              onPress={handleShare}
+              icon={<Icon as={<ExpoIcon name='MaterialIcons/share' />} size={4} />}
+            >
+            </IconButton>
+          </HStack>
 
           <HStack space={1} alignItems='center'>
             <Icon
@@ -68,6 +81,7 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
             </HStack>
 
           </HStack>
+
         </VStack>
       </VStack>
     </TouchableOpacity>
