@@ -35,24 +35,19 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
           paddingX={4}
           space={1}
         >
-          <Text
-            fontSize='md'
-            color='primary.700'
-          >{eventName}</Text>
-          <Text
-            fontSize='sm'
-            color='secondary.700'
-          >{name}</Text>
+
+          <Text fontSize='md' color='primary.700'>{eventName}</Text>
+          <Text fontSize='sm' color='secondary.700'>{name}</Text>
+
           <HStack space={1} alignItems='center'>
             <Icon
               as={<ExpoIcon name='FontAwesome5/map-marker-alt' />}
               size={4}
               color='muted.500'
             />
-            <Text
-              color='muted.500'
-            >{address}</Text>
+            <Text color='muted.500'>{address}</Text>
           </HStack>
+
           <HStack space={4} alignItems='center'>
             <HStack space={1} alignItems='center'>
               <Icon
@@ -60,20 +55,18 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
                 size={4}
                 color='muted.500'
               />
-              <Text
-                color='muted.500'
-              >{date}</Text>
+              <Text color='muted.500'>{date}</Text>
             </HStack>
+
             <HStack space={1} alignItems='center'>
               <Icon
                 as={<ExpoIcon name='MaterialIcons/access-time' />}
                 size={4}
                 color='muted.500'
               />
-              <Text
-                color='muted.500'
-              >{time}</Text>
+              <Text color='muted.500'>{time}</Text>
             </HStack>
+
           </HStack>
         </VStack>
       </VStack>
