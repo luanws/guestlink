@@ -4,6 +4,7 @@ import { Box, Fab, Heading, Icon, ScrollView, Text, VStack } from 'native-base'
 import { useCallback, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { InvitationCell } from '../components/cell/invitation'
+import { InvitationsSkeleton } from '../components/skeleton/invitation'
 import { ExpoIcon } from '../components/ui/expo-icon'
 import { Invitation } from '../models/invitation'
 import { InvitationService } from '../services/invitation'
@@ -40,9 +41,7 @@ export default function InvitationsScreen() {
           <VStack paddingX={8} marginBottom={24}>
             <Heading marginBottom={4}>Convites</Heading>
             <Box>
-              {invitations === undefined && (
-                <Text>Carregando...</Text>
-              )}
+              {invitations === undefined && <InvitationsSkeleton length={2} />}
               {invitations?.length === 0 && (
                 <Text>Você não possui convites</Text>
               )}
