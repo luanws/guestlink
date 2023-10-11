@@ -1,13 +1,8 @@
-import { Center, HStack, Icon, ScrollView, Switch, Text, VStack, theme, useColorMode } from 'native-base'
-import { useEffect } from 'react'
+import { Center, HStack, Icon, ScrollView, Switch, Text, VStack, useColorMode } from 'native-base'
 import { ExpoIcon } from '../components/ui/expo-icon'
 
 export default function () {
   const { colorMode, toggleColorMode, } = useColorMode()
-
-  useEffect(() => {
-    console.log(JSON.stringify(theme.colors, null, 2))
-  }, [colorMode])
 
   return (
     <ScrollView>
