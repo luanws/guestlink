@@ -2,7 +2,7 @@ import { Center, HStack, Icon, ScrollView, Switch, Text, VStack, useColorMode } 
 import { ExpoIcon } from '../components/ui/expo-icon'
 
 export default function () {
-  const { colorMode, toggleColorMode, } = useColorMode()
+  const { colorMode, toggleColorMode } = useColorMode()
 
   return (
     <ScrollView>
