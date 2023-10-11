@@ -1,9 +1,10 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import { router, useFocusEffect } from 'expo-router'
+import { Link, router, useFocusEffect } from 'expo-router'
 import { Box, Fab, Heading, Icon, ScrollView, Text, VStack } from 'native-base'
 import { useCallback, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { InvitationCell } from '../components/cell/invitation'
+import { ExpoIcon } from '../components/ui/expo-icon'
 import { Invitation } from '../models/invitation'
 import { InvitationService } from '../services/invitation'
 
@@ -21,9 +22,22 @@ export default function InvitationsScreen() {
 
   return (
     <>
+
       <SafeAreaView>
         <ScrollView>
-          <VStack padding={8}>
+
+          <Box
+            w='full'
+            alignItems='flex-end'
+            justifyContent='flex-end'
+            padding={4}
+          >
+            <Link href='/settings'>
+              <Icon as={<ExpoIcon name='Feather/settings' />} size={6} color='muted.500' />
+            </Link>
+          </Box>
+
+          <VStack paddingX={8} marginBottom={24}>
             <Heading marginBottom={4}>Convites</Heading>
             <Box>
               {invitations === undefined && (
@@ -34,10 +48,7 @@ export default function InvitationsScreen() {
               )}
               {invitations && invitations.length > 0 && (
                 <ScrollView>
-                  <VStack
-                    space={4}
-                    marginBottom={16}
-                  >
+                  <VStack space={4}>
                     {invitations.map((invitation, index) => (
                       <InvitationCell
                         key={index}
@@ -49,8 +60,10 @@ export default function InvitationsScreen() {
               )}
             </Box>
           </VStack>
+
         </ScrollView>
       </SafeAreaView>
+
       <Fab
         renderInPortal={false}
         right={4}
@@ -60,6 +73,7 @@ export default function InvitationsScreen() {
           router.push('/new-invitation')
         }}
       />
+
     </>
   )
 }
