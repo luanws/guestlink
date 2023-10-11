@@ -1,0 +1,15 @@
+FROM luanws/expo-android:latest
+
+WORKDIR /usr/src/app
+
+EXPOSE 19000
+EXPOSE 19001
+
+COPY package.json app.json ./
+
+RUN yarn install
+RUN npm i -g eas-cli
+
+COPY . .
+
+CMD ["yarn", "start"]

@@ -1,0 +1,15 @@
+version: "3.9"
+
+name: "invitation-maker-expo-app"
+
+services:
+  android:
+    build:
+      context: .
+      dockerfile: Dockerfile.android
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      - ./data:/app

@@ -1,0 +1,23 @@
+# Ignora os arquivos e diretórios que são gerados pelo Expo
+.expo/
+.expo-shared/
+.web-build/
+.android/
+.ios/
+
+# Ignora os arquivos e diretórios que são usados pelo docker
+.dockerignore
+.docker-compose.yml
+
+# Ignora a pasta node_modules, que contém os módulos instalados localmente
+node_modules/
+
+# Ignora os arquivos que contêm informações sensíveis ou configurações locais
+.env*
+*.lock
+*.log
+
+# Ignora os arquivos e diretórios que são usados pelo yarn
+.yarn/
+.yarnrc.yml
+.pnp.js
