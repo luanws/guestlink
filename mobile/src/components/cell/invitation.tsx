@@ -22,8 +22,9 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
     >
       <VStack
         space={1}
-        borderWidth={1}
+        borderWidth={1.5}
         borderColor='muted.300'
+        _dark={{ borderColor: 'muted.800' }}
         borderRadius={8}
         overflow='hidden'
       >
@@ -42,12 +43,26 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
 
           <HStack justifyContent='space-between' alignItems='flex-start'>
             <VStack>
-              <Text fontSize='md' color='primary.700'>{eventName}</Text>
-              <Text fontSize='sm' color='secondary.700'>{name}</Text>
+              <Text
+                fontSize='md'
+                color='primary.700'
+                _dark={{ color: 'primary.400' }}
+              >{eventName}</Text>
+              <Text
+                fontSize='sm'
+                color='secondary.700'
+                _dark={{ color: 'secondary.400' }}
+              >{name}</Text>
             </VStack>
             <IconButton
               onPress={handleShare}
-              icon={<Icon as={<ExpoIcon name='MaterialIcons/share' />} size={4} />}
+              icon={
+                <Icon
+                  as={<ExpoIcon name='MaterialIcons/share' />}
+                  size={4}
+                  color='primary.400'
+                />}
+              color='primary.400'
             >
             </IconButton>
           </HStack>
@@ -56,9 +71,8 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
             <Icon
               as={<ExpoIcon name='FontAwesome5/map-marker-alt' />}
               size={4}
-              color='muted.500'
             />
-            <Text color='muted.500'>{address}</Text>
+            <Text>{address}</Text>
           </HStack>
 
           <HStack space={4} alignItems='center'>
@@ -66,18 +80,16 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
               <Icon
                 as={<ExpoIcon name='MaterialIcons/event' />}
                 size={4}
-                color='muted.500'
               />
-              <Text color='muted.500'>{date}</Text>
+              <Text>{date}</Text>
             </HStack>
 
             <HStack space={1} alignItems='center'>
               <Icon
                 as={<ExpoIcon name='MaterialIcons/access-time' />}
                 size={4}
-                color='muted.500'
               />
-              <Text color='muted.500'>{time}</Text>
+              <Text>{time}</Text>
             </HStack>
 
           </HStack>
