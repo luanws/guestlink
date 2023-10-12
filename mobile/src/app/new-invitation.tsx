@@ -31,7 +31,7 @@ export default function () {
   async function handleSubmit(data: NewInvitationForm) {
     try {
       newInvitationSchema.parse(data)
-      await InvitationService.setInvitation(data)
+      await InvitationService.createInvitation(data)
       router.back()
     } catch (error) {
       if (error instanceof ZodError) {

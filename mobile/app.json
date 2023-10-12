@@ -23,8 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.luanws.invitationmaker",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.luanws.invitationmaker"
     },
     "web": {
       "favicon": "./assets/favicon.png",

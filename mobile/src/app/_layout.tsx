@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router'
 import { NativeBaseProvider, StatusBar, useColorMode } from 'native-base'
 import { PropsWithChildren } from 'react'
-import '../config/firebase'
 import { theme } from '../utils/theme'
 
 export default function Layout() {
