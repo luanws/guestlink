@@ -1,12 +1,12 @@
 import * as ImagePicker from 'expo-image-picker'
 
-export async function selectImage(): Promise<ImagePicker.ImagePickerAsset | undefined> {
+export async function selectImage(options?: ImagePicker.ImagePickerOptions): Promise<ImagePicker.ImagePickerAsset | undefined> {
   const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync()
   if (!granted) return
   const { assets } = await ImagePicker.launchImageLibraryAsync({
     allowsEditing: true,
     quality: 1,
-    base64: true,
+    ...options
   })
   if (!assets?.length) return
   const [asset] = assets

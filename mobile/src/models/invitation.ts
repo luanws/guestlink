@@ -1,5 +1,5 @@
 export interface Invitation {
-  imageBase64: string | null
+  imageUri: string | null
   name: string
   eventName: string
   date: string

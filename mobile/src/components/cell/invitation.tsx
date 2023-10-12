@@ -9,7 +9,7 @@ interface InvitationCellProps {
 }
 
 export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
-  const { name, address, date, eventName, imageBase64, time } = invitation
+  const { name, address, date, eventName, imageUri: imageBase64, time } = invitation
 
   function handleShare() {
     console.log(eventName, name)

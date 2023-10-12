@@ -1,4 +1,3 @@
-import { router } from 'expo-router'
 import { Button, Center, Icon, Image, Input, Pressable, ScrollView, Toast, VStack } from 'native-base'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,7 +8,7 @@ import { InvitationService } from '../services/invitation'
 import { selectImage } from '../utils/image'
 
 const newInvitationSchema = z.object({
-  imageBase64: z.string().nullable(),
+  imageUri: z.string().nullable(),
   name: z.string().min(1, 'Nome é obrigatório'),
   eventName: z.string().min(1, 'Evento é obrigatório'),
   date: z.string().min(1, 'Data é obrigatória').regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Data inválida'),
@@ -22,9 +21,12 @@ type NewInvitationForm = z.infer<typeof newInvitationSchema>
 export default function () {
   const form = useForm<NewInvitationForm>({
     defaultValues: {
-      name: '',
-      eventName: '',
-      imageBase64: '',
+      imageUri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540luanws%252Finvitation-maker/ImagePicker/baefc2d1-4e4c-4c9e-bbe4-4cdcc78ad3ea.jpeg',
+      name: 'Teste',
+      eventName: 'Teste',
+      address: 'dsfasdf',
+      date: '10/10/2021',
+      time: '10:20',
     },
   })
 
@@ -32,7 +34,7 @@ export default function () {
     try {
       newInvitationSchema.parse(data)
       await InvitationService.createInvitation(data)
-      router.back()
+      // router.back()
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.issues.map(issue => issue.message).join('\n')
@@ -55,13 +57,13 @@ export default function () {
         >
           <Controller
             control={form.control}
-            name='imageBase64'
+            name='imageUri'
             render={({ field: { onChange, value } }) => {
               async function handleSelectImage() {
                 const asset = await selectImage()
                 if (!asset) return
-                const { base64 } = asset
-                onChange(base64)
+                console.log(asset.uri)
+                onChange(asset.uri)
               }
 
               return (
@@ -77,7 +79,7 @@ export default function () {
                       size={200}
                       w='full'
                       alt='Foto'
-                      source={{ uri: `data:image/png;base64,${value}` }}
+                      source={{ uri: value }}
                     />
                   )}
                   {!value && (
@@ -122,6 +124,7 @@ export default function () {
                 placeholder='Evento'
                 InputLeftElement={<InputIcon name='MaterialIcons/event' />}
                 onChangeText={onChange}
+                {...restField}
               />
             )}
           />
@@ -133,6 +136,7 @@ export default function () {
                 placeholder='Endereço'
                 InputLeftElement={<InputIcon name='FontAwesome5/map-marker-alt' />}
                 onChangeText={onChange}
+                {...restField}
               />
             )}
           />
