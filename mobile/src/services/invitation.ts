@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { api } from '../lib/api'
-import { Invitation } from '../models/invitation'
+import { Invitation, NewInvitation } from '../models/invitation'
 
 export namespace InvitationService {
   async function addInvitationId(invitationId: string) {
@@ -10,6 +10,7 @@ export namespace InvitationService {
 
   async function getAllInvitationIds(): Promise<string[]> {
     const invitationIds = await AsyncStorage.getItem('@invitationIds')
+    console.log(invitationIds)
     return invitationIds ? JSON.parse(invitationIds) : []
   }
 
@@ -20,14 +21,20 @@ export namespace InvitationService {
 
   export async function getInvitations(): Promise<Invitation[]> {
     const invitationIds = await getAllInvitationIds()
-    const invitations = await Promise.all(invitationIds.map(async id => {
+    const invitations: (Invitation | { id: string })[] = await Promise.all(invitationIds.map(async id => {
       const { data } = await api.get(`/invitation/${id}`)
       return data
     }))
-    return invitations
+    for (const invitation of invitations) {
+      if (Object.keys(invitation).length === 1) {
+        await removeInvitationId(invitation.id)
+        invitations.splice(invitations.indexOf(invitation), 1)
+      }
+    }
+    return invitations as Invitation[]
   }
 
-  export async function createInvitation(invitation: Invitation) {
+  export async function createInvitation(invitation: NewInvitation) {
     const formData = new FormData()
     const { imageUri, ...rest } = invitation
     formData.append('rest', JSON.stringify(rest))

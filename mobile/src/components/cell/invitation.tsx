@@ -1,11 +1,11 @@
 import { HStack, Icon, IconButton, Image, Text, VStack } from 'native-base'
 import { TouchableOpacity } from 'react-native'
-import { Invitation } from '../../models/invitation'
+import { NewInvitation } from '../../models/invitation'
 import { ExpoIcon } from '../ui/expo-icon'
 
 interface InvitationCellProps {
-  invitation: Invitation
-  onPress?: (invitation: Invitation) => void
+  invitation: NewInvitation
+  onPress?: (invitation: NewInvitation) => void
 }
 
 export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
