@@ -6,7 +6,7 @@ import { ZodError, z } from 'zod'
 import { ExpoIcon } from '../components/ui/expo-icon'
 import { InputIcon } from '../components/ui/input-icon'
 import { InvitationService } from '../services/invitation'
-import { selectImage } from '../utils/image'
+import { maxSizeImage, selectImage } from '../utils/image'
 
 const newInvitationSchema = z.object({
   imageUri: z.string().nullable(),
@@ -22,12 +22,12 @@ type NewInvitationForm = z.infer<typeof newInvitationSchema>
 export default function () {
   const form = useForm<NewInvitationForm>({
     defaultValues: {
-      imageUri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540luanws%252Finvitation-maker/ImagePicker/baefc2d1-4e4c-4c9e-bbe4-4cdcc78ad3ea.jpeg',
-      name: 'Teste',
-      eventName: 'Teste',
-      address: 'dsfasdf',
-      date: '10/10/2021',
-      time: '10:20',
+      imageUri: '',
+      name: '',
+      eventName: '',
+      address: '',
+      date: '',
+      time: '',
     },
   })
 
@@ -63,8 +63,14 @@ export default function () {
               async function handleSelectImage() {
                 const asset = await selectImage()
                 if (!asset) return
-                console.log(asset.uri)
-                onChange(asset.uri)
+                const uri = await maxSizeImage({
+                  imageUri: asset.uri,
+                  width: asset.width,
+                  height: asset.height,
+                  maxHeight: 1024,
+                  maxWidth: 1024,
+                })
+                onChange(uri)
               }
 
               return (

@@ -1,10 +1,16 @@
 {
+  "editor.tabSize": 4,
+  "[typescriptreact]": {
     "editor.tabSize": 2,
-    "cSpell.words": [
-      "Entypo",
-      "Fontisto",
-      "Ionicons",
-      "Pressable",
-      "Zocial"
-    ]
+  },
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  "cSpell.words": [
+    "Entypo",
+    "Fontisto",
+    "Ionicons",
+    "Pressable",
+    "Zocial"
+  ]
 }
