@@ -9,7 +9,7 @@ interface InvitationCellProps {
 }
 
 export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
-  const { name, address, date, eventName, imageUri: imageBase64, time } = invitation
+  const { name, address, date, eventName, time, imageUri } = invitation
 
   function handleShare() {
     console.log(eventName, name)
@@ -28,13 +28,15 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
         borderRadius={8}
         overflow='hidden'
       >
-        <Image
-          w='full'
-          h={120}
-          resizeMode='cover'
-          source={{ uri: `data:image/png;base64,${imageBase64}` }}
-          alt='Foto'
-        />
+        {imageUri && (
+          <Image
+            w='full'
+            h={120}
+            resizeMode='cover'
+            source={{ uri: imageUri }}
+            alt='Foto'
+          />
+        )}
         <VStack
           paddingY={2}
           paddingX={4}

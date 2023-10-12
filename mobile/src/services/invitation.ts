@@ -1,9 +1,30 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { api } from '../lib/api'
 import { Invitation } from '../models/invitation'
 
 export namespace InvitationService {
+  async function addInvitationId(invitationId: string) {
+    const invitationIds = await getAllInvitationIds()
+    await AsyncStorage.setItem('@invitationIds', JSON.stringify([...invitationIds, invitationId]))
+  }
+
+  async function getAllInvitationIds(): Promise<string[]> {
+    const invitationIds = await AsyncStorage.getItem('@invitationIds')
+    return invitationIds ? JSON.parse(invitationIds) : []
+  }
+
+  export async function removeInvitationId(invitationId: string) {
+    const invitationIds = await getAllInvitationIds()
+    await AsyncStorage.setItem('@invitationIds', JSON.stringify(invitationIds.filter(id => id !== invitationId)))
+  }
+
   export async function getInvitations(): Promise<Invitation[]> {
-    return []
+    const invitationIds = await getAllInvitationIds()
+    const invitations = await Promise.all(invitationIds.map(async id => {
+      const { data } = await api.get(`/invitation/${id}`)
+      return data
+    }))
+    return invitations
   }
 
   export async function createInvitation(invitation: Invitation) {
@@ -19,6 +40,8 @@ export namespace InvitationService {
       } as any)
     }
 
-    await api.post('/invitation', formData)
+    const { data } = await api.post('/invitation', formData)
+    const { id } = data
+    await addInvitationId(id)
   }
 }

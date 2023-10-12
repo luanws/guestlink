@@ -1,3 +1,4 @@
+import { router } from 'expo-router'
 import { Button, Center, Icon, Image, Input, Pressable, ScrollView, Toast, VStack } from 'native-base'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -34,7 +35,7 @@ export default function () {
     try {
       newInvitationSchema.parse(data)
       await InvitationService.createInvitation(data)
-      // router.back()
+      router.back()
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.issues.map(issue => issue.message).join('\n')
