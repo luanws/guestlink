@@ -6,11 +6,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { InvitationCell } from '../components/cell/invitation'
 import { InvitationsSkeleton } from '../components/skeleton/invitation'
 import { ExpoIcon } from '../components/ui/expo-icon'
-import { NewInvitation } from '../models/invitation'
+import { Invitation } from '../models/invitation'
 import { InvitationService } from '../services/invitation'
 
 export default function InvitationsScreen() {
-  const [invitations, setInvitations] = useState<NewInvitation[] | undefined>(undefined)
+  const [invitations, setInvitations] = useState<Invitation[] | undefined>(undefined)
 
   useFocusEffect(useCallback(() => {
     updateInvitations()
@@ -19,6 +19,10 @@ export default function InvitationsScreen() {
   async function updateInvitations() {
     const invitations = await InvitationService.getInvitations()
     setInvitations(invitations)
+  }
+
+  async function handleOpenInvitation(invitation: Invitation) {
+    router.push(`/invitation/${invitation.id}`)
   }
 
   return (
@@ -51,6 +55,7 @@ export default function InvitationsScreen() {
                     {invitations.map((invitation, index) => (
                       <InvitationCell
                         key={index}
+                        onPress={() => handleOpenInvitation(invitation)}
                         invitation={invitation}
                       />
                     ))}
