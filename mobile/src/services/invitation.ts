@@ -12,8 +12,6 @@ export namespace InvitationService {
     formData.append('rest', JSON.stringify(rest))
 
     if (imageUri) {
-      console.log(imageUri)
-      // const file = new File([imageUri], 'image.jpeg', { type: 'image/jpeg' })
       formData.append('image', {
         uri: imageUri,
         name: 'imagem.jpg',
