@@ -9,6 +9,7 @@ export function InvitationsSkeleton({ length }: InvitationSkeletonsProps) {
     <VStack space={4}>
       {Array.from({ length }).map((_, index) => (
         <VStack
+          key={index}
           space={2}
           borderWidth={1.5}
           borderColor='muted.300'
