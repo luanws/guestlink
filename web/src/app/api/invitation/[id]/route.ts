@@ -1,5 +1,5 @@
 import { firebase } from '@/lib/firebase'
-import { InvitationService } from '@/services/invitation'
+import * as InvitationService from '@/services/invitation'
 import { NextRequest, NextResponse } from 'next/server'
 
 interface Params {

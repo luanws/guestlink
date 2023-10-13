@@ -7,6 +7,7 @@ import { Guest } from '@/models/guest'
 import * as InvitationService from '@/services/invitation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckIcon, Loader2, MinusIcon, PlusIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -38,6 +39,8 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
   const [numberOfCompanions, setNumberOfCompanions] = useState<number>(guest?.companions?.length ?? 0)
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false)
 
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,11 +51,15 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
 
   async function handleSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitLoading(true)
-    const guestName = normalizeName(data.guestName)
-    const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
-    const guest: Guest = { name: guestName, companions }
-    await InvitationService.setGuest({ invitationId, guest, guestId })
-    setIsSubmitLoading(false)
+    try {
+      const guestName = normalizeName(data.guestName)
+      const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
+      const guest: Guest = { name: guestName, companions }
+      await InvitationService.setGuest({ invitationId, guest, guestId })
+      router.push('/invitation/success')
+    } finally {
+      setIsSubmitLoading(false)
+    }
   }
 
   return (

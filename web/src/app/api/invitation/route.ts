@@ -1,6 +1,6 @@
 
 import { NewInvitation } from '@/models/invitation'
-import { InvitationService } from '@/services/invitation'
+import * as InvitationService from '@/services/invitation'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
