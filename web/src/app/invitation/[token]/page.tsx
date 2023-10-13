@@ -1,5 +1,6 @@
 import { IconText } from '@/components/icon-text'
 import * as jwt from '@/lib/jwt'
+import { Guest } from '@/models/guest'
 import * as InvitationService from '@/services/invitation'
 import { CalendarIcon, ClockIcon, MapPinIcon, User2Icon } from 'lucide-react'
 import Image from 'next/image'
@@ -22,6 +23,7 @@ export default async function ({ params: { token } }: Props) {
   const { invitationId, linkId } = jwt.verify(token) as TokenPayload
 
   const invitation = await InvitationService.getInvitationById(invitationId)
+  const guest: Guest | undefined = invitation.guests?.[linkId]
   const { address, date, eventName, imageUri, name, time } = invitation
 
   return (
@@ -60,6 +62,7 @@ export default async function ({ params: { token } }: Props) {
         <InvitationGuestForm
           invitationId={invitationId}
           guestId={linkId}
+          guest={guest}
         />
 
       </div>

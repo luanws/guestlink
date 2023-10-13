@@ -31,22 +31,27 @@ function normalizeName(name: string): string {
 interface InvitationGuestFormProps {
   invitationId: string
   guestId: string
+  guest?: Guest
 }
 
-export function InvitationGuestForm({ invitationId, guestId }: InvitationGuestFormProps) {
-  const [numberOfCompanions, setNumberOfCompanions] = useState<number>(0)
+export function InvitationGuestForm({ invitationId, guestId, guest }: InvitationGuestFormProps) {
+  const [numberOfCompanions, setNumberOfCompanions] = useState<number>(guest?.companions?.length ?? 0)
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      guestName: guest?.name ?? '',
+      companions: guest?.companions ?? [],
+    }
   })
 
   async function handleSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitLoading(true)
     const guestName = normalizeName(data.guestName)
     const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
-    const guest: Guest = { id: guestId, name: guestName, companions }
-    await InvitationService.setGuest({ invitationId, guest })
+    const guest: Guest = { name: guestName, companions }
+    await InvitationService.setGuest({ invitationId, guest, guestId })
     setIsSubmitLoading(false)
   }
 
