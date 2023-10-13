@@ -1,5 +1,4 @@
 import { IconText } from '@/components/icon-text'
-import { Section } from '@/components/ui/section'
 import * as jwt from '@/lib/jwt'
 import { InvitationService } from '@/services/invitation'
 import { CalendarIcon, ClockIcon, MapPinIcon, User2Icon } from 'lucide-react'
