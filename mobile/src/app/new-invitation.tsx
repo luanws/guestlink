@@ -53,7 +53,7 @@ export default function () {
     <>
       <ScrollView>
         <VStack
-          padding={4}
+          padding={8}
           space={4}
         >
           <Controller
@@ -95,6 +95,10 @@ export default function () {
                       borderStyle='dashed'
                       borderWidth={1}
                       borderColor='muted.400'
+                      _dark={{
+                        bgColor: 'muted.800',
+                        borderColor: 'muted.700',
+                      }}
                       borderRadius={8}
                       size={200}
                       w='full'
@@ -103,6 +107,9 @@ export default function () {
                         as={<ExpoIcon name='Entypo/image' />}
                         size={100}
                         color='muted.400'
+                        _dark={{
+                          color: 'muted.500',
+                        }}
                       />
                     </Center>
                   )}
