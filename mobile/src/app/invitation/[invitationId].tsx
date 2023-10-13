@@ -102,11 +102,24 @@ function InvitationShow({ invitation }: InvitationShowProps) {
         <HStack justifyContent='space-around' marginTop={8}>
           <IconButton
             onPress={handleShare}
-            icon={<Icon as={<ExpoIcon name='MaterialIcons/share' />} size={6} color='primary.500' />}
+            icon={
+              <Icon
+                as={<ExpoIcon name='MaterialIcons/share' />}
+                size={6}
+                color='primary.500'
+                _dark={{ color: 'primary.400' }}
+              />
+            }
           />
           <IconButton
             onPress={handleDelete}
-            icon={<Icon as={<ExpoIcon name='MaterialIcons/delete' />} size={6} color='danger.500' />}
+            icon={
+              <Icon
+                as={<ExpoIcon name='MaterialIcons/delete' />}
+                size={6}
+                color='danger.500'
+              />
+            }
           />
         </HStack>
 
