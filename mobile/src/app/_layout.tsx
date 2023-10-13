@@ -1,12 +1,11 @@
 import { Stack } from 'expo-router'
-import { NativeBaseProvider, StatusBar, useColorMode } from 'native-base'
-import { PropsWithChildren } from 'react'
+import { useColorMode } from 'native-base'
+import { AppProvider } from '../providers'
 import { theme } from '../utils/theme'
 
 export default function Layout() {
   return (
     <AppProvider>
-      <CustomStatusBar />
       <StackScreens />
     </AppProvider>
   )
@@ -56,22 +55,5 @@ function StackScreens() {
         }}
       />
     </Stack>
-  )
-}
-
-function CustomStatusBar() {
-  return (
-    <StatusBar
-      backgroundColor={theme.colors.secondary['900']}
-      barStyle='light-content'
-    />
-  )
-}
-
-function AppProvider({ children }: PropsWithChildren) {
-  return (
-    <NativeBaseProvider theme={theme}>
-      {children}
-    </NativeBaseProvider>
   )
 }

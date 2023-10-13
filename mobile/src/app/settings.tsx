@@ -1,8 +1,17 @@
 import { Center, HStack, Icon, ScrollView, Switch, Text, VStack, useColorMode } from 'native-base'
 import { ExpoIcon } from '../components/ui/expo-icon'
+import usePersistedState from '../hooks/persisted-state'
 
 export default function () {
-  const { colorMode, toggleColorMode } = useColorMode()
+  const [, setPersistedColorMode] = usePersistedState<string>('colorMode', 'light')
+
+  const { colorMode, setColorMode } = useColorMode()
+
+  function handleToggle() {
+    const newColorMode = colorMode === 'dark' ? 'light' : 'dark'
+    setColorMode(newColorMode)
+    setPersistedColorMode(newColorMode)
+  }
 
   return (
     <ScrollView>
@@ -22,7 +31,7 @@ export default function () {
               <Text>Modo escuro</Text>
             </HStack>
           </Center>
-          <Switch isChecked={colorMode === 'dark'} onToggle={toggleColorMode} />
+          <Switch isChecked={colorMode === 'dark'} onToggle={handleToggle} />
         </HStack>
 
       </VStack>
