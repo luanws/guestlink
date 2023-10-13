@@ -13,14 +13,18 @@ const formSchema = z.object({
   guestName: z.string({ required_error: 'O nome é obrigatório' })
     .min(2, 'O nome deve ter pelo menos 2 caracteres')
     .max(255, 'O nome deve ter no máximo 255 caracteres')
-    .regex(/^[a-zA-ZÀ-ú]+ [a-zA-ZÀ-ú]+$/, 'Digite seu nome completo'),
+    .regex(/^([a-zA-ZÀ-ú]+)\s+([a-zA-ZÀ-ú]+(\s+)?)+$/g, 'Digite seu nome completo'),
   companions: z.array(
     z.string({ required_error: 'O nome é obrigatório' })
       .min(2, 'O nome deve ter pelo menos 2 caracteres')
       .max(255, 'O nome deve ter no máximo 255 caracteres')
-      .regex(/^[a-zA-ZÀ-ú]+ [a-zA-ZÀ-ú]+$/, 'Digite o nome completo do acompanhante')
+      .regex(/^([a-zA-ZÀ-ú]+)\s+([a-zA-ZÀ-ú]+(\s+)?)+$/, 'Digite o nome completo do acompanhante')
   ).optional(),
 })
+
+function normalizeName(name: string): string {
+  return name.trim().replace(/\s+/g, ' ')
+}
 
 export function InvitationGuestForm() {
   const [numberOfCompanions, setNumberOfCompanions] = useState<number>(0)
@@ -32,8 +36,8 @@ export function InvitationGuestForm() {
 
   async function handleSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitLoading(true)
-    const { guestName } = data
-    const companions = data.companions?.slice(0, numberOfCompanions) ?? []
+    const guestName = normalizeName(data.guestName)
+    const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
     console.log({ guestName, companions })
     await new Promise(resolve => setTimeout(resolve, 2000))
     setIsSubmitLoading(false)
