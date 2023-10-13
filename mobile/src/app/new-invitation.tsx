@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
 import { Button, Center, Icon, Image, Input, Pressable, ScrollView, Toast, VStack } from 'native-base'
-import React from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
 import { ExpoIcon } from '../components/ui/expo-icon'
@@ -20,6 +20,8 @@ const newInvitationSchema = z.object({
 type NewInvitationForm = z.infer<typeof newInvitationSchema>
 
 export default function () {
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false)
+
   const form = useForm<NewInvitationForm>({
     defaultValues: {
       imageUri: '',
@@ -32,6 +34,7 @@ export default function () {
   })
 
   async function handleSubmit(data: NewInvitationForm) {
+    setIsLoadingSubmit(true)
     try {
       newInvitationSchema.parse(data)
       await InvitationService.createInvitation(data)
@@ -46,6 +49,8 @@ export default function () {
           duration: 5000,
         })
       }
+    } finally {
+      setIsLoadingSubmit(false)
     }
   }
 
@@ -198,6 +203,7 @@ export default function () {
             )}
           />
           <Button
+            isLoading={isLoadingSubmit}
             onPress={form.handleSubmit(handleSubmit)}
           >Enviar</Button>
         </VStack>
