@@ -39,11 +39,11 @@ export default async function ({ params: { token } }: Props) {
 
         <p className='w-full'>
           Você recebeu um convite de {' '}
-          <span className='text-green-400'>
+          <span className='font-bold text-green-600 dark:text-green-400'>
             {eventName.toUpperCase()}
           </span>
           {' de '}
-          <span className='text-blue-400'>
+          <span className='font-bold text-blue-600 dark:text-blue-400'>
             {name.toUpperCase()}
           </span>.
           Por favor, confirme sua presença e informe os nomes dos seus acompanhantes.
