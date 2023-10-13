@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Share } from 'react-native'
 import { api } from '../lib/api'
 import { Invitation, NewInvitation } from '../models/invitation'
 
@@ -57,5 +58,15 @@ export namespace InvitationService {
     export async function deleteInvitation(id: string) {
         await api.delete(`/invitation/${id}`)
         await removeInvitationId(id)
+    }
+
+    async function getShareLink(id: string): Promise<string> {
+        const { data: { shareLink } } = await api.get(`/invitation/${id}/share`)
+        return shareLink
+    }
+
+    export async function shareInvitation(id: string) {
+        const shareLink = await getShareLink(id)
+        await Share.share({ message: shareLink })
     }
 }

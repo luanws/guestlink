@@ -36,7 +36,7 @@ function InvitationShow({ invitation }: InvitationShowProps) {
   const { address, date, eventName, id, imageUri, name, time } = invitation
 
   async function handleShare() {
-
+    await InvitationService.shareInvitation(invitation.id)
   }
 
   async function handleDelete() {
