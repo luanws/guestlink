@@ -2,8 +2,8 @@ import { router, useGlobalSearchParams } from 'expo-router'
 import { HStack, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
 import { useEffect, useState } from 'react'
 import { ExpoIcon } from '../../components/ui/expo-icon'
-import { api } from '../../lib/api'
 import { Invitation } from '../../models/invitation'
+import { InvitationService } from '../../services/invitation'
 
 export default function () {
   const { invitationId } = useGlobalSearchParams<{ invitationId: string }>()
@@ -15,8 +15,8 @@ export default function () {
   }, [])
 
   async function updateInvitation() {
-    const { data } = await api.get(`/invitation/${invitationId}`)
-    setInvitation(data)
+    const invitation = await InvitationService.getInvitation(invitationId)
+    setInvitation(invitation)
   }
 
   return (
@@ -40,7 +40,7 @@ function InvitationShow({ invitation }: InvitationShowProps) {
   }
 
   async function handleDelete() {
-    await api.delete(`/invitation/${id}`)
+    await InvitationService.deleteInvitation(id)
     router.back()
   }
 

@@ -17,7 +17,7 @@ export default function InvitationsScreen() {
   }, []))
 
   async function updateInvitations() {
-    const invitations = await InvitationService.getInvitations()
+    const invitations = await InvitationService.getUserInvitations()
     setInvitations(invitations)
   }
 
