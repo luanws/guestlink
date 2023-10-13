@@ -3,6 +3,8 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Guest } from '@/models/guest'
+import * as InvitationService from '@/services/invitation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckIcon, Loader2, MinusIcon, PlusIcon } from 'lucide-react'
 import { useState } from 'react'
@@ -26,7 +28,12 @@ function normalizeName(name: string): string {
   return name.trim().replace(/\s+/g, ' ')
 }
 
-export function InvitationGuestForm() {
+interface InvitationGuestFormProps {
+  invitationId: string
+  guestId: string
+}
+
+export function InvitationGuestForm({ invitationId, guestId }: InvitationGuestFormProps) {
   const [numberOfCompanions, setNumberOfCompanions] = useState<number>(0)
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false)
 
@@ -38,8 +45,8 @@ export function InvitationGuestForm() {
     setIsSubmitLoading(true)
     const guestName = normalizeName(data.guestName)
     const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
-    console.log({ guestName, companions })
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    const guest: Guest = { id: guestId, name: guestName, companions }
+    await InvitationService.setGuest({ invitationId, guest })
     setIsSubmitLoading(false)
   }
 

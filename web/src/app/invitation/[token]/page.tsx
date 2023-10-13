@@ -1,6 +1,6 @@
 import { IconText } from '@/components/icon-text'
 import * as jwt from '@/lib/jwt'
-import { InvitationService } from '@/services/invitation'
+import * as InvitationService from '@/services/invitation'
 import { CalendarIcon, ClockIcon, MapPinIcon, User2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { InvitationGuestForm } from './form'
@@ -57,7 +57,10 @@ export default async function ({ params: { token } }: Props) {
           <IconText Icon={ClockIcon} info={time} />
         </div>
 
-        <InvitationGuestForm />
+        <InvitationGuestForm
+          invitationId={invitationId}
+          guestId={linkId}
+        />
 
       </div>
     </div>
