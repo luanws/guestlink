@@ -1,6 +1,7 @@
 import { router, useGlobalSearchParams } from 'expo-router'
-import { HStack, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
+import { Box, Center, HStack, Heading, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
 import { useEffect, useState } from 'react'
+import { GuestCell } from '../../components/cell/guest'
 import { ExpoIcon } from '../../components/ui/expo-icon'
 import { Invitation } from '../../models/invitation'
 import { InvitationService } from '../../services/invitation'
@@ -33,7 +34,7 @@ interface InvitationShowProps {
 }
 
 function InvitationShow({ invitation }: InvitationShowProps) {
-  const { address, date, eventName, id, imageUri, name, time } = invitation
+  const { address, date, eventName, id, imageUri, name, time, guests } = invitation
 
   async function handleShare() {
     await InvitationService.shareInvitation(invitation.id)
@@ -122,6 +123,33 @@ function InvitationShow({ invitation }: InvitationShowProps) {
             }
           />
         </HStack>
+
+        {!!guests && (
+          <Box>
+            <HStack mt={8} mb={4} alignItems='center' space={2}>
+              <Icon
+                as={<ExpoIcon name='MaterialIcons/person' />}
+                size='lg'
+                color='text.50'
+              />
+              <Heading fontSize='lg'>
+                Lista de convidados
+              </Heading>
+            </HStack>
+            <VStack space={4}>
+              {Object.entries(guests).map(([guestId, guest]) =>
+                <GuestCell key={guestId} guest={guest} />
+              )}
+            </VStack>
+          </Box>
+        )}
+        {!guests && (
+          <Center>
+            <Text mt={4} mb={2}>
+              Nenhum convidado confirmou presença
+            </Text>
+          </Center>
+        )}
 
       </VStack>
 
