@@ -27,6 +27,7 @@ function StackScreens() {
         headerTintColor: colorMode === 'dark' ? theme.colors.gray['100'] : theme.colors.gray['900'],
         statusBarStyle: colorMode === 'dark' ? 'light' : 'dark',
         statusBarColor: colorMode === 'dark' ? theme.colors.gray['800'] : theme.colors.gray['100'],
+        navigationBarColor: 'black',
       }}
     >
       <Stack.Screen
