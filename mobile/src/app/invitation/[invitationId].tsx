@@ -1,6 +1,6 @@
 import { router, useGlobalSearchParams } from 'expo-router'
-import { Box, Center, Divider, HStack, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
-import { useEffect, useState } from 'react'
+import { AlertDialog, Box, Button, Center, Divider, HStack, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
+import { useEffect, useRef, useState } from 'react'
 import { GuestCell } from '../../components/cell/guest'
 import { ExpoIcon, ExpoIconName } from '../../components/ui/expo-icon'
 import { Invitation } from '../../models/invitation'
@@ -23,130 +23,72 @@ export default function () {
 
   return (
     <ScrollView>
-      <VStack>
-        {invitation && <InvitationShow invitation={invitation} />}
-      </VStack>
+      {invitation && <InvitationShow invitation={invitation} />}
     </ScrollView>
   )
 }
 
-interface InvitationShowProps {
-  invitation: Invitation
+function InvitationShow({ invitation }: { invitation: Invitation }) {
+  const { id, imageUri, eventName, guests } = invitation
+
+  return (
+    <VStack space={1}>
+      <InvitationImage imageUri={imageUri} />
+      <VStack paddingY={8} paddingX={8} space={8}>
+        <EventNameText eventName={eventName} />
+        <IconInfoList invitation={invitation} />
+        <ActionButtonList invitationId={id} />
+        <GuestList invitationId={id} guests={guests} />
+      </VStack>
+    </VStack>
+  )
 }
 
-function InvitationShow({ invitation }: InvitationShowProps) {
-  const { address, date, eventName, id, imageUri, name, time, guests } = invitation
+function InvitationImage({ imageUri }: { imageUri?: string | null }) {
+  if (!imageUri) return null
+
+  return (
+    <Image
+      w='full'
+      h={200}
+      resizeMode='cover'
+      source={{ uri: imageUri }}
+      alt='Foto'
+    />
+  )
+}
+
+function EventNameText({ eventName }: { eventName: string }) {
+  return (
+    <HStack alignItems='flex-start' flexWrap='wrap'>
+      <Text fontSize='md'>
+        Este é um convite de {' '}
+      </Text>
+      <Text
+        color='Primary.700'
+        fontWeight='bold'
+        fontSize='md'
+        _dark={{ color: 'Primary.400' }}
+      >{eventName}</Text>
+    </HStack>
+  )
+}
+
+function IconInfoList({ invitation: { name, address, date, time, guests } }: { invitation: Invitation }) {
   const numberOfParticipants = Object.values(guests ?? {}).reduce(
     (acc, guest) => acc + (guest.companions?.length ?? 0) + 1,
     0
   )
 
-  async function handleShare() {
-    await InvitationService.shareInvitation(invitation.id)
-  }
-
-  async function handleDelete() {
-    await InvitationService.deleteInvitation(id)
-    router.back()
-  }
-
   return (
-    <VStack space={1}>
-
-
-      {imageUri && (
-        <Image
-          w='full'
-          h={200}
-          resizeMode='cover'
-          source={{ uri: imageUri }}
-          alt='Foto'
-        />
-      )}
-
-      <VStack paddingY={8} paddingX={8} space={8}>
-
-        <HStack alignItems='flex-start' flexWrap='wrap'>
-          <Text fontSize='md'>
-            Este é um convite de {' '}
-          </Text>
-          <Text
-            color='Primary.700'
-            fontWeight='bold'
-            fontSize='md'
-            _dark={{ color: 'Primary.400' }}
-          >{eventName}</Text>
-        </HStack>
-
-        <VStack space={4}>
-          <IconInfo icon='Feather/user' info={name} />
-          <IconInfo icon='Feather/map-pin' info={address} />
-          <IconInfo icon='Feather/calendar' info={date} />
-          <IconInfo icon='Feather/clock' info={time} />
-          <IconInfo icon='Feather/users' info={
-            `${numberOfParticipants} ${numberOfParticipants === 1 ? 'participante' : 'participantes'}`
-          } />
-        </VStack>
-
-        <HStack justifyContent='space-around'>
-          <IconButton
-            onPress={handleShare}
-            icon={
-              <Icon
-                as={<ExpoIcon name='MaterialIcons/share' />}
-                size={6}
-                color='Primary.500'
-                _dark={{ color: 'Primary.400' }}
-              />
-            }
-          />
-          <IconButton
-            onPress={handleDelete}
-            icon={
-              <Icon
-                as={<ExpoIcon name='MaterialIcons/delete' />}
-                size={6}
-                color='danger.500'
-              />
-            }
-          />
-        </HStack>
-
-
-        {!!guests && (
-          <Box>
-            <HStack alignItems='center' space={2}>
-              <Icon
-                as={<ExpoIcon name='Feather/users' />}
-                size='md'
-              />
-              <Text fontSize='lg'>
-                Lista de convidados
-              </Text>
-            </HStack>
-            <Divider mb={4} mt={2} />
-            <VStack space={4}>
-              {Object.entries(guests).map(([guestId, guest]) =>
-                <GuestCell
-                  key={guestId}
-                  guest={guest}
-                  guestId={guestId}
-                  invitationId={id}
-                />
-              )}
-            </VStack>
-          </Box>
-        )}
-        {!guests && (
-          <Center>
-            <Text mt={4} mb={2}>
-              Nenhum convidado confirmou presença
-            </Text>
-          </Center>
-        )}
-
-      </VStack>
-
+    <VStack space={4}>
+      <IconInfo icon='Feather/user' info={name} />
+      <IconInfo icon='Feather/map-pin' info={address} />
+      <IconInfo icon='Feather/calendar' info={date} />
+      <IconInfo icon='Feather/clock' info={time} />
+      <IconInfo icon='Feather/users' info={
+        `${numberOfParticipants} ${numberOfParticipants === 1 ? 'participante' : 'participantes'}`
+      } />
     </VStack>
   )
 }
@@ -160,5 +102,118 @@ function IconInfo({ info, icon }: { info: string, icon: ExpoIconName }) {
       />
       <Text fontSize='md'>{info}</Text>
     </HStack>
+  )
+}
+
+function ActionButtonList({ invitationId }: { invitationId: string }) {
+  return (
+    <HStack justifyContent='space-around'>
+      <ShareButton invitationId={invitationId} />
+      <DeleteInvitationButton invitationId={invitationId} />
+    </HStack>
+  )
+}
+
+function ShareButton({ invitationId }: { invitationId: string }) {
+  async function handleShare() {
+    await InvitationService.shareInvitation(invitationId)
+  }
+
+  return (
+    <IconButton
+      onPress={handleShare}
+      icon={
+        <Icon
+          as={<ExpoIcon name='MaterialIcons/share' />}
+          size={6}
+          color='Primary.500'
+          _dark={{ color: 'Primary.400' }}
+        />
+      }
+    />
+  )
+}
+
+function DeleteInvitationButton({ invitationId }: { invitationId: string }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const cancelRef = useRef(null)
+
+  const openDialog = () => setIsOpen(true)
+  const closeDialog = () => setIsOpen(false)
+
+  async function handleDelete() {
+    await InvitationService.deleteInvitation(invitationId)
+    closeDialog()
+    router.back()
+  }
+
+  return (
+    <Center>
+      <IconButton
+        colorScheme='danger'
+        onPress={openDialog}
+        icon={
+          <Icon
+            as={<ExpoIcon name='MaterialIcons/delete' />}
+            size={6}
+          />
+        }
+      />
+      <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={closeDialog}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Excluir convite</AlertDialog.Header>
+          <AlertDialog.Body>
+            Tem certeza que deseja excluir este convite?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button variant='unstyled' colorScheme='coolGray' onPress={closeDialog} ref={cancelRef}>
+                Cancel
+              </Button>
+              <Button colorScheme='danger' onPress={handleDelete}>
+                Excluir
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+    </Center>
+  )
+}
+
+function GuestList({ guests, invitationId }: { guests?: Invitation['guests'], invitationId: string }) {
+  return (
+    <Box>
+      <HStack alignItems='center' space={2}>
+        <Icon
+          as={<ExpoIcon name='Feather/users' />}
+          size='md'
+        />
+        <Text fontSize='lg'>
+          Lista de convidados
+        </Text>
+      </HStack>
+      <Divider mb={4} mt={2} />
+      {!!guests && (
+        <VStack space={4}>
+          {Object.entries(guests).map(([guestId, guest]) =>
+            <GuestCell
+              key={guestId}
+              guest={guest}
+              guestId={guestId}
+              invitationId={invitationId}
+            />
+          )}
+        </VStack>
+      )}
+      {!guests && (
+        <Center>
+          <Text mt={4} mb={2}>
+            Nenhum convidado confirmou presença
+          </Text>
+        </Center>
+      )}
+    </Box>
   )
 }
