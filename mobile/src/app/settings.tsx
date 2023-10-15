@@ -1,40 +1,68 @@
-import { Center, HStack, Icon, ScrollView, Switch, Text, VStack, useColorMode } from 'native-base'
+import { Actionsheet, HStack, Icon, ScrollView, Text, VStack } from 'native-base'
+import { useState } from 'react'
+import { TouchableOpacity } from 'react-native'
 import { ExpoIcon } from '../components/ui/expo-icon'
-import usePersistedState from '../hooks/persisted-state'
+import { useTheme } from '../providers/theme'
 
 export default function () {
-  const [, setPersistedColorMode] = usePersistedState<string>('colorMode', 'light')
+  return (
+    <ScrollView>
+      <ThemeSettings />
+    </ScrollView>
+  )
+}
 
-  const { colorMode, setColorMode } = useColorMode()
+function ThemeSettings() {
+  const [isOpenThemeActionSheet, setIsOpenThemeActionSheet] = useState<boolean>(false)
 
-  function handleToggle() {
-    const newColorMode = colorMode === 'dark' ? 'light' : 'dark'
-    setColorMode(newColorMode)
-    setPersistedColorMode(newColorMode)
+  const { setPreferredColorScheme, colorScheme, preferredColorScheme } = useTheme()
+
+  function handleSelectColorScheme(colorScheme: 'light' | 'dark' | 'auto') {
+    setPreferredColorScheme(colorScheme)
+    setIsOpenThemeActionSheet(false)
   }
 
   return (
-    <ScrollView>
-      <VStack
-        paddingX={8}
-        paddingY={4}
-        space={4}
-      >
+    <VStack
+      paddingX={8}
+      paddingY={4}
+      space={4}
+    >
 
-        <HStack w='full' alignItems='center' justifyContent='space-between'>
-          <Center>
-            <HStack alignItems='center' justifyContent='center' space={2}>
-              <Icon
-                as={<ExpoIcon name='Feather/moon' />}
-                size={6}
-              />
-              <Text>Modo escuro</Text>
-            </HStack>
-          </Center>
-          <Switch isChecked={colorMode === 'dark'} onToggle={handleToggle} />
+      <TouchableOpacity onPress={() => setIsOpenThemeActionSheet(true)}>
+        <HStack alignItems='center' space={4}>
+          <Icon
+            as={<ExpoIcon name={colorScheme === 'light' ? 'Feather/sun' : 'Feather/moon'} />}
+            size={6}
+          />
+          <VStack>
+            <Text fontSize='xl'>Tema</Text>
+            <Text>{{
+              light: 'Claro',
+              dark: 'Escuro',
+              auto: 'Padrão do sistema',
+            }[preferredColorScheme]}</Text>
+          </VStack>
         </HStack>
+      </TouchableOpacity>
 
-      </VStack>
-    </ScrollView>
+      <Actionsheet
+        isOpen={isOpenThemeActionSheet}
+        onClose={() => setIsOpenThemeActionSheet(false)}
+      >
+        <Actionsheet.Content>
+          <Actionsheet.Item onPress={() => handleSelectColorScheme('auto')}>
+            Padrão do sistema
+          </Actionsheet.Item>
+          <Actionsheet.Item onPress={() => handleSelectColorScheme('light')}>
+            Claro
+          </Actionsheet.Item>
+          <Actionsheet.Item onPress={() => handleSelectColorScheme('dark')}>
+            Escuro
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
+
+    </VStack>
   )
 }

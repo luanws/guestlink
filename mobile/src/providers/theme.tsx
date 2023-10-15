@@ -3,23 +3,33 @@ import * as SystemUI from 'expo-system-ui'
 import { NativeBaseProvider, useColorMode } from 'native-base'
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
+import usePersistedState from '../hooks/persisted-state'
 import { darkColors, theme as defaultTheme, lightColors } from '../utils/theme'
 
 export type Theme = typeof defaultTheme
+
+type PreferredColorScheme = 'light' | 'dark' | 'auto'
 
 interface ThemeContextData {
   theme: Theme
   colorScheme: 'light' | 'dark'
   colors: Theme['colors']
+  setPreferredColorScheme: (colorScheme: PreferredColorScheme) => void
+  preferredColorScheme: PreferredColorScheme
 }
 
 const ThemeContext = createContext({} as ThemeContextData)
 
 export function ThemeProvider({ children }: PropsWithChildren) {
-  const colorScheme = useColorScheme()
+  const systemColorScheme = useColorScheme()
 
   const [theme, setTheme] = useState<Theme>(defaultTheme)
+  const [preferredColorScheme, setPreferredColorScheme] = usePersistedState<PreferredColorScheme>(
+    '@preferred-color-scheme',
+    'auto'
+  )
 
+  const colorScheme = preferredColorScheme === 'auto' ? systemColorScheme : preferredColorScheme
   const colors = theme.colors
 
   useEffect(() => {
@@ -29,6 +39,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   }, [colorScheme])
 
   function changeNativeBaseTheme() {
+    console.log(colorScheme)
     const newColors = colorScheme === 'dark' ? darkColors : lightColors
     setTheme({
       ...defaultTheme,
@@ -53,6 +64,8 @@ export function ThemeProvider({ children }: PropsWithChildren) {
       theme,
       colors,
       colorScheme: colorScheme === 'dark' ? 'dark' : 'light',
+      setPreferredColorScheme,
+      preferredColorScheme,
     }}>
       <NativeBaseProvider theme={theme}>
         <NativeBaseColorModeManager>
@@ -64,10 +77,11 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 }
 
 function NativeBaseColorModeManager({ children }: PropsWithChildren) {
-  const colorScheme = useColorScheme()
+  const { colorScheme } = useTheme()
   const { setColorMode } = useColorMode()
 
   useEffect(() => {
+    console.log('colorScheme', colorScheme)
     setColorMode(colorScheme)
   }, [colorScheme])
 
