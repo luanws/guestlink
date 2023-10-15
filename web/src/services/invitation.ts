@@ -58,6 +58,14 @@ export async function deleteInvitation(id: string): Promise<void> {
     await firebase.storage().bucket().file(`invitations/${id}.jpg`).delete()
 }
 
+export async function deleteGuest({ invitationId, guestId }: {
+    invitationId: string
+    guestId: string
+}): Promise<void> {
+    await firebase.database().ref(`invitations/${invitationId}/guests/${guestId}`).remove()
+}
+
+
 export async function setGuest({ invitationId, guest, guestId }: {
     invitationId: string
     guest: Guest

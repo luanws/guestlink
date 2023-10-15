@@ -38,6 +38,11 @@ interface InvitationGuestFormProps {
 export function InvitationGuestForm({ invitationId, guestId, guest }: InvitationGuestFormProps) {
   const [numberOfCompanions, setNumberOfCompanions] = useState<number>(guest?.companions?.length ?? 0)
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
+
+  const isButtonsDisable = isSubmitLoading || isDeleteLoading
+
+  const isUpdate = !!guest
 
   const router = useRouter()
 
@@ -48,6 +53,16 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
       companions: guest?.companions ?? [],
     }
   })
+
+  async function handleDelete() {
+    setIsDeleteLoading(true)
+    try {
+      await InvitationService.deleteGuest({ invitationId, guestId })
+      router.replace('/invitation/canceled')
+    } finally {
+      setIsDeleteLoading(false)
+    }
+  }
 
   async function handleSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitLoading(true)
@@ -138,15 +153,29 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
           ))}
         </div>
 
-        <Button
-          className='w-full flex items-center justify-center gap-2'
-          disabled={isSubmitLoading}
-          type='submit'
-        >
-          {isSubmitLoading && <Loader2 className='h-4 w-4 animate-spin' />}
-          {!isSubmitLoading && <CheckIcon className='h-4 w-4' />}
-          Confirmar presença
-        </Button>
+        <div className='flex items-center gap-4 flex-wrap'>
+          {isUpdate && (
+            <Button
+              variant='destructive'
+              className='flex-1 min-w-[200px] flex items-center justify-center gap-2'
+              type='button'
+              onClick={handleDelete}
+              disabled={isButtonsDisable}
+            >
+              {isDeleteLoading && <Loader2 className='h-4 w-4 animate-spin' />}
+              Cancelar presença
+            </Button>
+          )}
+          <Button
+            className='flex-1 min-w-[200px] flex items-center justify-center gap-2'
+            disabled={isButtonsDisable}
+            type='submit'
+          >
+            {isSubmitLoading && <Loader2 className='h-4 w-4 animate-spin' />}
+            {!isSubmitLoading && <CheckIcon className='h-4 w-4' />}
+            {isUpdate ? 'Atualizar' : 'Confirmar presença'}
+          </Button>
+        </div>
 
       </form>
     </Form>
