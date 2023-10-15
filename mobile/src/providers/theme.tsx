@@ -1,3 +1,4 @@
+import * as NavigationBar from 'expo-navigation-bar'
 import * as SystemUI from 'expo-system-ui'
 import { NativeBaseProvider, useColorMode } from 'native-base'
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
@@ -19,9 +20,12 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 
   const [theme, setTheme] = useState<Theme>(defaultTheme)
 
+  const colors = theme.colors
+
   useEffect(() => {
     changeNativeBaseTheme()
     changeBackgroundColor()
+    changeNavigationBarColor()
   }, [colorScheme])
 
   function changeNativeBaseTheme() {
@@ -29,7 +33,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     setTheme({
       ...defaultTheme,
       colors: {
-        ...theme.colors,
+        ...colors,
         ...newColors
       }
     })
@@ -40,10 +44,14 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     SystemUI.setBackgroundColorAsync(backgroundColor)
   }
 
+  function changeNavigationBarColor() {
+    NavigationBar.setBackgroundColorAsync('#00000044')
+  }
+
   return (
     <ThemeContext.Provider value={{
       theme,
-      colors: theme.colors,
+      colors,
       colorScheme: colorScheme === 'dark' ? 'dark' : 'light',
     }}>
       <NativeBaseProvider theme={theme}>
