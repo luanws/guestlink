@@ -37,7 +37,7 @@ interface InvitationShowProps {
 function InvitationShow({ invitation }: InvitationShowProps) {
   const { address, date, eventName, id, imageUri, name, time, guests } = invitation
   const numberOfParticipants = Object.values(guests ?? {}).reduce(
-    (acc, guest) => acc + guest.companions.length + 1,
+    (acc, guest) => acc + (guest.companions?.length ?? 0) + 1,
     0
   )
 

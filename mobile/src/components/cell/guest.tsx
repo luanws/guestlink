@@ -57,7 +57,7 @@ export function GuestCell({ guest, guestId, invitationId }: GuestCellProps) {
       />
 
       <VStack space={0}>
-        {companions.map((companion, index) => (
+        {companions?.map((companion, index) => (
           <HStack
             key={index}
             alignItems='center'
@@ -70,6 +70,11 @@ export function GuestCell({ guest, guestId, invitationId }: GuestCellProps) {
             </Text>
           </HStack>
         ))}
+        {!companions?.length && (
+          <Text fontSize='sm' mx={2} color='muted.500'>
+            Sem acompanhantes
+          </Text>
+        )}
       </VStack>
     </VStack>
   )
