@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { Button, Center, Icon, Image, Input, Pressable, ScrollView, Toast, VStack } from 'native-base'
+import { Button, Center, FormControl, Icon, Image, Input, Pressable, ScrollView, VStack } from 'native-base'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { ZodError, z } from 'zod'
@@ -41,12 +41,8 @@ export default function () {
       router.back()
     } catch (error) {
       if (error instanceof ZodError) {
-        const errorMessage = error.issues.map(issue => issue.message).join('\n')
-        Toast.show({
-          title: 'Erro',
-          backgroundColor: 'danger.500',
-          description: errorMessage,
-          duration: 5000,
+        error.issues.forEach((issue) => {
+          form.setError(issue.path?.join('.') as any, { type: 'manual', message: issue.message })
         })
       }
     } finally {
@@ -126,80 +122,105 @@ export default function () {
           <Controller
             control={form.control}
             name='eventName'
-            render={({ field: { onChange, ...restField } }) => (
-              <Input
-                placeholder='Evento'
-                InputLeftElement={<InputIcon name='Feather/award' />}
-                onChangeText={onChange}
-                {...restField}
-              />
+            render={({ field: { onChange, ...restField }, fieldState }) => (
+              <FormControl isInvalid={!!fieldState.error}>
+                <Input
+                  placeholder='Evento'
+                  InputLeftElement={<InputIcon name='Feather/award' />}
+                  onChangeText={onChange}
+                  {...restField}
+                />
+                <FormControl.ErrorMessage>
+                  {fieldState.error?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
             )}
           />
           <Controller
             control={form.control}
             name='name'
-            render={({ field: { onChange, ...restField } }) => (
-              <Input
-                placeholder='Nome'
-                InputLeftElement={<InputIcon name='Feather/user' />}
-                {...restField}
-                onChangeText={onChange}
-              />
+            render={({ field: { onChange, ...restField }, fieldState }) => (
+              <FormControl isInvalid={!!fieldState.error}>
+                <Input
+                  placeholder='Nome'
+                  InputLeftElement={<InputIcon name='Feather/user' />}
+                  {...restField}
+                  onChangeText={onChange}
+                />
+                <FormControl.ErrorMessage>
+                  {fieldState.error?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
             )}
           />
           <Controller
             control={form.control}
             name='address'
-            render={({ field: { onChange, ...restField } }) => (
-              <Input
-                placeholder='Endereço'
-                InputLeftElement={<InputIcon name='Feather/map-pin' />}
-                onChangeText={onChange}
-                {...restField}
-              />
+            render={({ field: { onChange, ...restField }, fieldState }) => (
+              <FormControl isInvalid={!!fieldState.error}>
+                <Input
+                  placeholder='Endereço'
+                  InputLeftElement={<InputIcon name='Feather/map-pin' />}
+                  onChangeText={onChange}
+                  {...restField}
+                />
+                <FormControl.ErrorMessage>
+                  {fieldState.error?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
             )}
           />
           <Controller
             control={form.control}
             name='date'
-            render={({ field: { onChange, ...restField } }) => (
-              <Input
-                placeholder='Data'
-                keyboardType='numeric'
-                InputLeftElement={<InputIcon name='Feather/calendar' />}
-                {...restField}
-                onChangeText={text => {
-                  const textWithoutMask = text.replace(/\D/g, '')
-                  const parts = [
-                    textWithoutMask.substring(0, 2),
-                    textWithoutMask.substring(2, 4),
-                    textWithoutMask.substring(4, 8)
-                  ].filter(Boolean)
-                  const maskedText = parts.join('/')
-                  onChange(maskedText)
-                }}
-              />
+            render={({ field: { onChange, ...restField }, fieldState }) => (
+              <FormControl isInvalid={!!fieldState.error}>
+                <Input
+                  placeholder='Data'
+                  keyboardType='numeric'
+                  InputLeftElement={<InputIcon name='Feather/calendar' />}
+                  {...restField}
+                  onChangeText={text => {
+                    const textWithoutMask = text.replace(/\D/g, '')
+                    const parts = [
+                      textWithoutMask.substring(0, 2),
+                      textWithoutMask.substring(2, 4),
+                      textWithoutMask.substring(4, 8)
+                    ].filter(Boolean)
+                    const maskedText = parts.join('/')
+                    onChange(maskedText)
+                  }}
+                />
+                <FormControl.ErrorMessage>
+                  {fieldState.error?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
             )}
           />
           <Controller
             control={form.control}
             name='time'
-            render={({ field: { onChange, ...restField } }) => (
-              <Input
-                placeholder='HH:MM'
-                keyboardType='numeric'
-                InputLeftElement={<InputIcon name='Feather/clock' />}
-                {...restField}
-                onChangeText={text => {
-                  const textWithoutMask = text.replace(/\D/g, '')
-                  const parts = [
-                    textWithoutMask.substring(0, 2),
-                    textWithoutMask.substring(2, 4),
-                  ].filter(Boolean)
-                  const maskedText = parts.join(':')
-                  onChange(maskedText)
-                }}
-              />
+            render={({ field: { onChange, ...restField }, fieldState }) => (
+              <FormControl isInvalid={!!fieldState.error}>
+                <Input
+                  placeholder='HH:MM'
+                  keyboardType='numeric'
+                  InputLeftElement={<InputIcon name='Feather/clock' />}
+                  {...restField}
+                  onChangeText={text => {
+                    const textWithoutMask = text.replace(/\D/g, '')
+                    const parts = [
+                      textWithoutMask.substring(0, 2),
+                      textWithoutMask.substring(2, 4),
+                    ].filter(Boolean)
+                    const maskedText = parts.join(':')
+                    onChange(maskedText)
+                  }}
+                />
+                <FormControl.ErrorMessage>
+                  {fieldState.error?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
             )}
           />
           <Button
