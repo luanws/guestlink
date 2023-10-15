@@ -23,9 +23,15 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
     >
       <VStack
         space={1}
-        borderWidth={1.5}
-        borderColor='muted.300'
-        _dark={{ borderColor: 'muted.800' }}
+        borderWidth={0.5}
+        _light={{
+          borderColor: 'muted.200',
+          backgroundColor: 'white'
+        }}
+        _dark={{
+          backgroundColor: 'muted.800',
+          borderColor: 'transparent',
+        }}
         borderRadius={8}
         overflow='hidden'
       >
