@@ -2,9 +2,11 @@ import { router, useGlobalSearchParams } from 'expo-router'
 import { Box, Center, HStack, Heading, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
 import { useEffect, useState } from 'react'
 import { GuestCell } from '../../components/cell/guest'
-import { ExpoIcon } from '../../components/ui/expo-icon'
+import { ExpoIcon, ExpoIconName } from '../../components/ui/expo-icon'
 import { Invitation } from '../../models/invitation'
 import { InvitationService } from '../../services/invitation'
+
+import { Text as _Text } from 'react-native'
 
 export default function () {
   const { invitationId } = useGlobalSearchParams<{ invitationId: string }>()
@@ -48,6 +50,7 @@ function InvitationShow({ invitation }: InvitationShowProps) {
   return (
     <VStack space={1}>
 
+
       {imageUri && (
         <Image
           w='full'
@@ -58,47 +61,26 @@ function InvitationShow({ invitation }: InvitationShowProps) {
         />
       )}
 
-      <VStack paddingY={4} paddingX={8} space={2}>
+      <VStack paddingY={8} paddingX={8} space={8}>
 
-        <HStack justifyContent='space-between' alignItems='flex-start'>
-          <VStack space={1}>
-            <Text
-              fontSize='md'
-              color='Primary.700'
-              _dark={{ color: 'Primary.400' }}
-            >{eventName}</Text>
-            <Text
-              fontSize='sm'
-              color='Complementary.700'
-              _dark={{ color: 'Complementary.400' }}
-            >{name}</Text>
-          </VStack>
+        <HStack alignItems='flex-start' flexWrap='wrap'>
+          <Text fontSize='md'>
+            Este é um convite de {' '}
+          </Text>
+          <Text
+            color='Primary.700'
+            fontWeight='bold'
+            fontSize='md'
+            _dark={{ color: 'Primary.400' }}
+          >{eventName}</Text>
         </HStack>
 
-        <HStack space={1} alignItems='center'>
-          <Icon
-            as={<ExpoIcon name='FontAwesome5/map-marker-alt' />}
-            size={4}
-          />
-          <Text>{address}</Text>
-        </HStack>
-
-        <HStack space={4} alignItems='center'>
-          <HStack space={1} alignItems='center'>
-            <Icon
-              as={<ExpoIcon name='MaterialIcons/event' />}
-              size={4}
-            />
-            <Text>{date}</Text>
-          </HStack>
-          <HStack space={1} alignItems='center'>
-            <Icon
-              as={<ExpoIcon name='MaterialIcons/access-time' />}
-              size={4}
-            />
-            <Text>{time}</Text>
-          </HStack>
-        </HStack>
+        <VStack space={4}>
+          <IconInfo icon='Feather/user' info={name} />
+          <IconInfo icon='Feather/map-pin' info={address} />
+          <IconInfo icon='Feather/calendar' info={date} />
+          <IconInfo icon='Feather/clock' info={time} />
+        </VStack>
 
         <HStack justifyContent='space-around' marginTop={8}>
           <IconButton
@@ -154,5 +136,17 @@ function InvitationShow({ invitation }: InvitationShowProps) {
       </VStack>
 
     </VStack>
+  )
+}
+
+function IconInfo({ info, icon }: { info: string, icon: ExpoIconName }) {
+  return (
+    <HStack space={2} alignItems='center'>
+      <Icon
+        as={<ExpoIcon name={icon} />}
+        size={5}
+      />
+      <Text fontSize='md'>{info}</Text>
+    </HStack>
   )
 }

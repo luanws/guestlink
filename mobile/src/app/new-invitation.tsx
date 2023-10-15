@@ -125,25 +125,25 @@ export default function () {
 
           <Controller
             control={form.control}
-            name='name'
+            name='eventName'
             render={({ field: { onChange, ...restField } }) => (
               <Input
-                placeholder='Nome'
-                InputLeftElement={<InputIcon name='MaterialIcons/person' />}
-                {...restField}
+                placeholder='Evento'
+                InputLeftElement={<InputIcon name='Feather/award' />}
                 onChangeText={onChange}
+                {...restField}
               />
             )}
           />
           <Controller
             control={form.control}
-            name='eventName'
+            name='name'
             render={({ field: { onChange, ...restField } }) => (
               <Input
-                placeholder='Evento'
-                InputLeftElement={<InputIcon name='MaterialIcons/event' />}
-                onChangeText={onChange}
+                placeholder='Nome'
+                InputLeftElement={<InputIcon name='Feather/user' />}
                 {...restField}
+                onChangeText={onChange}
               />
             )}
           />
@@ -153,7 +153,7 @@ export default function () {
             render={({ field: { onChange, ...restField } }) => (
               <Input
                 placeholder='Endereço'
-                InputLeftElement={<InputIcon name='FontAwesome5/map-marker-alt' />}
+                InputLeftElement={<InputIcon name='Feather/map-pin' />}
                 onChangeText={onChange}
                 {...restField}
               />
@@ -166,7 +166,7 @@ export default function () {
               <Input
                 placeholder='Data'
                 keyboardType='numeric'
-                InputLeftElement={<InputIcon name='MaterialIcons/calendar-today' />}
+                InputLeftElement={<InputIcon name='Feather/calendar' />}
                 {...restField}
                 onChangeText={text => {
                   const textWithoutMask = text.replace(/\D/g, '')
@@ -188,7 +188,7 @@ export default function () {
               <Input
                 placeholder='HH:MM'
                 keyboardType='numeric'
-                InputLeftElement={<InputIcon name='MaterialIcons/access-time' />}
+                InputLeftElement={<InputIcon name='Feather/clock' />}
                 {...restField}
                 onChangeText={text => {
                   const textWithoutMask = text.replace(/\D/g, '')
