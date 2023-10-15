@@ -39,7 +39,6 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   }, [colorScheme])
 
   function changeNativeBaseTheme() {
-    console.log(colorScheme)
     const newColors = colorScheme === 'dark' ? darkColors : lightColors
     setTheme({
       ...defaultTheme,
@@ -81,7 +80,6 @@ function NativeBaseColorModeManager({ children }: PropsWithChildren) {
   const { setColorMode } = useColorMode()
 
   useEffect(() => {
-    console.log('colorScheme', colorScheme)
     setColorMode(colorScheme)
   }, [colorScheme])
 
