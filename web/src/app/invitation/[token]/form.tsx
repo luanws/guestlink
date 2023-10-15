@@ -56,7 +56,7 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
       const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
       const guest: Guest = { name: guestName, companions }
       await InvitationService.setGuest({ invitationId, guest, guestId })
-      router.push('/invitation/success')
+      router.replace('/invitation/success')
     } finally {
       setIsSubmitLoading(false)
     }
