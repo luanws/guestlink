@@ -3,6 +3,7 @@
 import { firebase } from '@/lib/firebase'
 import { Guest } from '@/models/guest'
 import { Invitation, NewInvitation } from '@/models/invitation'
+import { v4 as uuid } from 'uuid'
 
 export async function getInvitationById(id: string): Promise<Invitation> {
     const database = firebase.database()
@@ -15,8 +16,10 @@ export async function getInvitationById(id: string): Promise<Invitation> {
 }
 
 export async function createInvitation(newInvitation: NewInvitation): Promise<Invitation> {
-    const snapshot = await firebase.database().ref('invitations').push(newInvitation)
-    const invitationId = snapshot.key as string
+    const id = uuid()
+    const invitationRef = firebase.database().ref('invitations').child(id)
+    await invitationRef.set(newInvitation)
+    const invitationId = id
 
     const { imageFile, ...newInvitationRest } = newInvitation
     let imageUri: string | null = null
@@ -39,7 +42,7 @@ export async function createInvitation(newInvitation: NewInvitation): Promise<In
 
         await storageFile.makePublic()
         imageUri = storageFile.publicUrl()
-        await snapshot.ref.update({ imageUri })
+        await invitationRef.update({ imageUri })
     }
 
     const invitation: Invitation = {
