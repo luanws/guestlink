@@ -8,28 +8,36 @@ import { InvitationService } from '../../services/invitation'
 
 
 export default function () {
-  const { invitationId } = useGlobalSearchParams<{ invitationId: string }>()
+  const { invitationAuthKey } = useGlobalSearchParams<{ invitationAuthKey: string }>()
 
-  const [invitation, setInvitation] = useState<Invitation | undefined>(undefined)
+  const [invitation, setInvitation] = useState<Invitation | null | undefined>(undefined)
 
   useEffect(() => {
     updateInvitation()
   }, [])
 
   async function updateInvitation() {
-    const invitation = await InvitationService.getInvitation(invitationId)
+    const invitation = await InvitationService.getInvitation(invitationAuthKey)
     setInvitation(invitation)
   }
 
   return (
     <ScrollView>
-      {invitation && <InvitationShow invitation={invitation} />}
+      {invitation && (
+        <InvitationShow
+          invitation={invitation}
+          invitationAuthKey={invitationAuthKey}
+        />
+      )}
     </ScrollView>
   )
 }
 
-function InvitationShow({ invitation }: { invitation: Invitation }) {
-  const { id, imageUri, eventName, guests } = invitation
+function InvitationShow({ invitation, invitationAuthKey }: {
+  invitation: Invitation
+  invitationAuthKey: string
+}) {
+  const { imageUri, eventName, guests } = invitation
 
   return (
     <VStack space={1}>
@@ -37,8 +45,8 @@ function InvitationShow({ invitation }: { invitation: Invitation }) {
       <VStack paddingY={8} paddingX={8} space={8}>
         <EventNameText eventName={eventName} />
         <IconInfoList invitation={invitation} />
-        <ActionButtonList invitationId={id} />
-        <GuestList invitationId={id} guests={guests} />
+        <ActionButtonList invitationAuthKey={invitationAuthKey} />
+        <GuestList invitationAuthKey={invitationAuthKey} guests={guests} />
       </VStack>
     </VStack>
   )
@@ -105,18 +113,18 @@ function IconInfo({ info, icon }: { info: string, icon: ExpoIconName }) {
   )
 }
 
-function ActionButtonList({ invitationId }: { invitationId: string }) {
+function ActionButtonList({ invitationAuthKey }: { invitationAuthKey: string }) {
   return (
     <HStack justifyContent='space-around'>
-      <ShareButton invitationId={invitationId} />
-      <DeleteInvitationButton invitationId={invitationId} />
+      <ShareButton invitationAuthKey={invitationAuthKey} />
+      <DeleteInvitationButton invitationAuthKey={invitationAuthKey} />
     </HStack>
   )
 }
 
-function ShareButton({ invitationId }: { invitationId: string }) {
+function ShareButton({ invitationAuthKey }: { invitationAuthKey: string }) {
   async function handleShare() {
-    await InvitationService.shareInvitation(invitationId)
+    await InvitationService.shareInvitation(invitationAuthKey)
   }
 
   return (
@@ -134,7 +142,7 @@ function ShareButton({ invitationId }: { invitationId: string }) {
   )
 }
 
-function DeleteInvitationButton({ invitationId }: { invitationId: string }) {
+function DeleteInvitationButton({ invitationAuthKey }: { invitationAuthKey: string }) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const cancelRef = useRef(null)
 
@@ -142,7 +150,7 @@ function DeleteInvitationButton({ invitationId }: { invitationId: string }) {
   const closeDialog = () => setIsOpen(false)
 
   async function handleDelete() {
-    await InvitationService.deleteInvitation(invitationId)
+    await InvitationService.deleteInvitation(invitationAuthKey)
     closeDialog()
     router.back()
   }
@@ -182,7 +190,7 @@ function DeleteInvitationButton({ invitationId }: { invitationId: string }) {
   )
 }
 
-function GuestList({ guests, invitationId }: { guests?: Invitation['guests'], invitationId: string }) {
+function GuestList({ guests, invitationAuthKey }: { guests?: Invitation['guests'], invitationAuthKey: string }) {
   return (
     <Box>
       <HStack alignItems='center' space={2}>
@@ -202,7 +210,7 @@ function GuestList({ guests, invitationId }: { guests?: Invitation['guests'], in
               key={guestId}
               guest={guest}
               guestId={guestId}
-              invitationId={invitationId}
+              invitationAuthKey={invitationAuthKey}
             />
           )}
         </VStack>

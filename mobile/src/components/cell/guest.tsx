@@ -6,14 +6,14 @@ import { ExpoIcon } from '../ui/expo-icon'
 interface GuestCellProps {
   guest: Guest
   guestId: string
-  invitationId: string
+  invitationAuthKey: string
 }
 
-export function GuestCell({ guest, guestId, invitationId }: GuestCellProps) {
+export function GuestCell({ guest, guestId, invitationAuthKey }: GuestCellProps) {
   const { name, companions } = guest
 
   async function handleShare() {
-    await InvitationService.shareInvitationToExistingGuest(invitationId, guestId)
+    await InvitationService.shareInvitationToExistingGuest(invitationAuthKey, guestId)
   }
 
   return (

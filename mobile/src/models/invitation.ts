@@ -1,5 +1,9 @@
 import { Guest } from './guest'
 
+export interface InvitationWithAuthKey extends Invitation {
+    authKey: string
+}
+
 export interface Invitation {
     id: string
     imageUri: string | null

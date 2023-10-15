@@ -1,4 +1,5 @@
 
+import { encrypt } from '@/lib/crypto'
 import { NewInvitation } from '@/models/invitation'
 import * as InvitationService from '@/services/invitation'
 import { NextRequest, NextResponse } from 'next/server'
@@ -26,7 +27,10 @@ export async function POST(request: NextRequest) {
     const { id: invitationId } = await InvitationService.createInvitation(newInvitation)
 
     return NextResponse.json({
-        ...newInvitation,
-        id: invitationId
+        invitation: {
+            ...newInvitation,
+            id: invitationId
+        },
+        invitationAuthorizationKey: encrypt(invitationId)
     })
 }

@@ -48,7 +48,7 @@ function StackScreens() {
         }}
       />
       <Stack.Screen
-        name='invitation/[invitationId]'
+        name='invitation/[invitationAuthKey]'
         options={{
           title: 'Convite',
         }}

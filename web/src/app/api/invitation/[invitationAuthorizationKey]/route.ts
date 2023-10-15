@@ -1,12 +1,14 @@
+import { decrypt } from '@/lib/crypto'
 import { firebase } from '@/lib/firebase'
 import * as InvitationService from '@/services/invitation'
 import { NextRequest, NextResponse } from 'next/server'
 
 interface Params {
-    id: string
+    invitationAuthorizationKey: string
 }
 
-export async function GET(request: NextRequest, { params: { id } }: { params: Params }) {
+export async function GET(request: NextRequest, { params: { invitationAuthorizationKey } }: { params: Params }) {
+    const id = decrypt(invitationAuthorizationKey)
     const snapshot = await firebase.database().ref(`invitations/${id}`).get()
     const invitation = {
         ...snapshot.val(),
@@ -15,7 +17,8 @@ export async function GET(request: NextRequest, { params: { id } }: { params: Pa
     return NextResponse.json(invitation)
 }
 
-export async function DELETE(request: NextRequest, { params: { id } }: { params: Params }) {
+export async function DELETE(request: NextRequest, { params: { invitationAuthorizationKey } }: { params: Params }) {
+    const id = decrypt(invitationAuthorizationKey)
     await InvitationService.deleteInvitation(id)
     return NextResponse.json({
         id

@@ -1,40 +1,53 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Share } from 'react-native'
 import { api } from '../lib/api'
-import { Invitation, NewInvitation } from '../models/invitation'
+import { Invitation, InvitationWithAuthKey, NewInvitation } from '../models/invitation'
 
 export namespace InvitationService {
-    async function addInvitationId(invitationId: string) {
-        const invitationIds = await getAllInvitationIds()
-        await AsyncStorage.setItem('@invitationIds', JSON.stringify([...invitationIds, invitationId]))
+    async function addInvitationAuthKey(authorizationKey: string) {
+        const invitationIds = await getSavedInvitationAuthKey()
+        await AsyncStorage.setItem(
+            'invitationAuthKeys',
+            JSON.stringify([...invitationIds, authorizationKey])
+        )
     }
 
-    async function getAllInvitationIds(): Promise<string[]> {
-        const invitationIds = await AsyncStorage.getItem('@invitationIds')
-        console.log(invitationIds)
-        return invitationIds ? JSON.parse(invitationIds) : []
+    async function getSavedInvitationAuthKey(): Promise<string[]> {
+        const authKeys = await AsyncStorage.getItem('invitationAuthKeys')
+        console.log(authKeys)
+        return authKeys ? JSON.parse(authKeys) : []
     }
 
-    export async function removeInvitationId(invitationId: string) {
-        const invitationIds = await getAllInvitationIds()
-        await AsyncStorage.setItem('@invitationIds', JSON.stringify(invitationIds.filter(id => id !== invitationId)))
+    export async function removeInvitationAuthKey(authKey: string) {
+        const authKeys = await getSavedInvitationAuthKey()
+        await AsyncStorage.setItem(
+            'invitationAuthKeys',
+            JSON.stringify(authKeys.filter(id => id !== authKey))
+        )
     }
 
-    export async function getInvitation(id: string): Promise<Invitation> {
-        const { data } = await api.get(`/invitation/${id}`)
+    export async function getInvitation(authKey: string): Promise<Invitation | null> {
+        const { data } = await api.get(`/invitation/${authKey}`)
+        if (Object.keys(data).length === 1) {
+            await removeInvitationAuthKey(authKey)
+            return null
+        }
         return data
     }
 
-    export async function getUserInvitations(): Promise<Invitation[]> {
-        const invitationIds = await getAllInvitationIds()
-        const invitations: (Invitation | { id: string })[] = await Promise.all(invitationIds.map(getInvitation))
-        for (const invitation of invitations) {
-            if (Object.keys(invitation).length === 1) {
-                await removeInvitationId(invitation.id)
-                invitations.splice(invitations.indexOf(invitation), 1)
+
+
+    export async function getUserInvitations(): Promise<InvitationWithAuthKey[]> {
+        const authKeys = await getSavedInvitationAuthKey()
+        const invitations = await Promise.all(authKeys.map(async authKey => {
+            const invitation = await getInvitation(authKey)
+            if (!invitation) return null
+            return {
+                ...invitation,
+                authKey,
             }
-        }
-        return invitations as Invitation[]
+        }))
+        return invitations.filter(x => x !== null) as InvitationWithAuthKey[]
     }
 
     export async function createInvitation(invitation: NewInvitation) {
@@ -51,13 +64,13 @@ export namespace InvitationService {
         }
 
         const { data } = await api.post('/invitation', formData)
-        const { id } = data
-        await addInvitationId(id)
+        const { invitationAuthorizationKey } = data
+        await addInvitationAuthKey(invitationAuthorizationKey)
     }
 
-    export async function deleteInvitation(id: string) {
-        await api.delete(`/invitation/${id}`)
-        await removeInvitationId(id)
+    export async function deleteInvitation(authKey: string) {
+        await api.delete(`/invitation/${authKey}`)
+        await removeInvitationAuthKey(authKey)
     }
 
     async function getShareLink(id: string, guestId?: string): Promise<string> {
@@ -67,8 +80,8 @@ export namespace InvitationService {
         return shareLink
     }
 
-    export async function shareInvitation(id: string) {
-        const shareLink = await getShareLink(id)
+    export async function shareInvitation(authKey: string) {
+        const shareLink = await getShareLink(authKey)
         await Share.share({ message: shareLink })
     }
 

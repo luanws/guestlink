@@ -1,19 +1,19 @@
 import { HStack, Icon, IconButton, Image, Text, VStack } from 'native-base'
 import { TouchableOpacity } from 'react-native'
-import { Invitation } from '../../models/invitation'
+import { Invitation, InvitationWithAuthKey } from '../../models/invitation'
 import { InvitationService } from '../../services/invitation'
 import { ExpoIcon, ExpoIconName } from '../ui/expo-icon'
 
 interface InvitationCellProps {
-  invitation: Invitation
+  invitation: InvitationWithAuthKey
   onPress?: (invitation: Invitation) => void
 }
 
 export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
-  const { name, address, date, eventName, time, imageUri } = invitation
+  const { name, address, date, eventName, time, imageUri, authKey } = invitation
 
   async function handleShare() {
-    await InvitationService.shareInvitation(invitation.id)
+    await InvitationService.shareInvitation(authKey)
   }
 
   return (

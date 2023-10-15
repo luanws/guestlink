@@ -1,12 +1,15 @@
+import { decrypt } from '@/lib/crypto'
 import * as jwt from '@/lib/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import { v4 as uuid } from 'uuid'
 
 interface Params {
-    id: string
+    invitationAuthorizationKey: string
 }
 
-export async function GET(request: NextRequest, { params: { id } }: { params: Params }) {
+export async function GET(request: NextRequest, { params: { invitationAuthorizationKey } }: { params: Params }) {
+    const id = decrypt(invitationAuthorizationKey)
+
     const baseUrl = request.nextUrl.origin
     const guestId = request.nextUrl.searchParams.get('guestId')
 
