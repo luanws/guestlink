@@ -1,12 +1,11 @@
 import { router, useGlobalSearchParams } from 'expo-router'
-import { Box, Center, HStack, Heading, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
+import { Box, Center, Divider, HStack, Heading, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
 import { useEffect, useState } from 'react'
 import { GuestCell } from '../../components/cell/guest'
 import { ExpoIcon, ExpoIconName } from '../../components/ui/expo-icon'
 import { Invitation } from '../../models/invitation'
 import { InvitationService } from '../../services/invitation'
 
-import { Text as _Text } from 'react-native'
 
 export default function () {
   const { invitationId } = useGlobalSearchParams<{ invitationId: string }>()
@@ -37,6 +36,10 @@ interface InvitationShowProps {
 
 function InvitationShow({ invitation }: InvitationShowProps) {
   const { address, date, eventName, id, imageUri, name, time, guests } = invitation
+  const numberOfParticipants = Object.values(guests ?? {}).reduce(
+    (acc, guest) => acc + guest.companions.length + 1,
+    0
+  )
 
   async function handleShare() {
     await InvitationService.shareInvitation(invitation.id)
@@ -80,9 +83,12 @@ function InvitationShow({ invitation }: InvitationShowProps) {
           <IconInfo icon='Feather/map-pin' info={address} />
           <IconInfo icon='Feather/calendar' info={date} />
           <IconInfo icon='Feather/clock' info={time} />
+          <IconInfo icon='Feather/users' info={
+            `${numberOfParticipants} ${numberOfParticipants === 1 ? 'participante' : 'participantes'}`
+          } />
         </VStack>
 
-        <HStack justifyContent='space-around' marginTop={8}>
+        <HStack justifyContent='space-around'>
           <IconButton
             onPress={handleShare}
             icon={
@@ -106,11 +112,12 @@ function InvitationShow({ invitation }: InvitationShowProps) {
           />
         </HStack>
 
+
         {!!guests && (
           <Box>
-            <HStack mt={8} mb={4} alignItems='center' space={2}>
+            <HStack alignItems='center' space={2}>
               <Icon
-                as={<ExpoIcon name='MaterialIcons/person' />}
+                as={<ExpoIcon name='Feather/users' />}
                 size='lg'
                 color='text.50'
               />
@@ -118,6 +125,7 @@ function InvitationShow({ invitation }: InvitationShowProps) {
                 Lista de convidados
               </Heading>
             </HStack>
+            <Divider mb={4} mt={2} />
             <VStack space={4}>
               {Object.entries(guests).map(([guestId, guest]) =>
                 <GuestCell key={guestId} guest={guest} />
