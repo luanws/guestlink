@@ -11,7 +11,7 @@ export function GuestCell({ guest }: GuestCellProps) {
   return (
     <VStack>
       <Text
-        color='secondary.400'
+        color='Complementary.400'
         fontSize='md'
       >
         {name}

@@ -48,13 +48,13 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
             <VStack>
               <Text
                 fontSize='md'
-                color='primary.700'
-                _dark={{ color: 'primary.400' }}
+                color='Primary.700'
+                _dark={{ color: 'Primary.400' }}
               >{eventName}</Text>
               <Text
                 fontSize='sm'
-                color='secondary.700'
-                _dark={{ color: 'secondary.400' }}
+                color='Complementary.700'
+                _dark={{ color: 'Complementary.400' }}
               >{name}</Text>
             </VStack>
             <IconButton
@@ -63,9 +63,9 @@ export function InvitationCell({ invitation, onPress }: InvitationCellProps) {
                 <Icon
                   as={<ExpoIcon name='MaterialIcons/share' />}
                   size={4}
-                  color='primary.400'
+                  color='Primary.400'
                 />}
-              color='primary.400'
+              color='Primary.400'
             >
             </IconButton>
           </HStack>

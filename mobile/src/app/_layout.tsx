@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router'
-import { useColorMode } from 'native-base'
 import { AppProvider } from '../providers'
-import { theme } from '../utils/theme'
+import { useTheme } from '../providers/theme'
 
 export default function Layout() {
   return (
@@ -12,22 +11,21 @@ export default function Layout() {
 }
 
 function StackScreens() {
-  const { colorMode } = useColorMode()
+  const { colors, colorScheme } = useTheme()
 
   return (
     <Stack
       screenOptions={{
         animation: 'fade_from_bottom',
         contentStyle: {
-          backgroundColor: colorMode === 'dark' ? theme.colors.gray['900'] : theme.colors.gray['100'],
+          backgroundColor: colors.contentBackground,
         },
         headerStyle: {
-          backgroundColor: colorMode === 'dark' ? theme.colors.gray['800'] : theme.colors.gray['100'],
+          backgroundColor: colors.headerBackground,
         },
-        headerTintColor: colorMode === 'dark' ? theme.colors.gray['100'] : theme.colors.gray['900'],
-        statusBarStyle: colorMode === 'dark' ? 'light' : 'dark',
-        statusBarColor: colorMode === 'dark' ? theme.colors.gray['800'] : theme.colors.gray['100'],
-        navigationBarColor: 'black',
+        headerTintColor: colors.headerTint,
+        statusBarStyle: colorScheme === 'dark' ? 'light' : 'dark',
+        statusBarColor: colors.statusBar,
       }}
     >
       <Stack.Screen

@@ -64,13 +64,13 @@ function InvitationShow({ invitation }: InvitationShowProps) {
           <VStack space={1}>
             <Text
               fontSize='md'
-              color='primary.700'
-              _dark={{ color: 'primary.400' }}
+              color='Primary.700'
+              _dark={{ color: 'Primary.400' }}
             >{eventName}</Text>
             <Text
               fontSize='sm'
-              color='secondary.700'
-              _dark={{ color: 'secondary.400' }}
+              color='Complementary.700'
+              _dark={{ color: 'Complementary.400' }}
             >{name}</Text>
           </VStack>
         </HStack>
@@ -107,8 +107,8 @@ function InvitationShow({ invitation }: InvitationShowProps) {
               <Icon
                 as={<ExpoIcon name='MaterialIcons/share' />}
                 size={6}
-                color='primary.500'
-                _dark={{ color: 'primary.400' }}
+                color='Primary.500'
+                _dark={{ color: 'Primary.400' }}
               />
             }
           />
