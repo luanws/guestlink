@@ -8,8 +8,11 @@ interface Params {
 
 export async function GET(request: NextRequest, { params: { id } }: { params: Params }) {
     const baseUrl = request.nextUrl.origin
+    const guestId = request.nextUrl.searchParams.get('guestId')
 
-    const token = jwt.sign({ invitationId: id, linkId: uuid() })
+    const linkId = guestId ?? uuid()
+
+    const token = jwt.sign({ invitationId: id, linkId })
 
     return NextResponse.json({
         shareLink: `${baseUrl}/invitation/${token}`
