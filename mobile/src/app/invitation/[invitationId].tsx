@@ -1,5 +1,5 @@
 import { router, useGlobalSearchParams } from 'expo-router'
-import { Box, Center, Divider, HStack, Heading, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
+import { Box, Center, Divider, HStack, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
 import { useEffect, useState } from 'react'
 import { GuestCell } from '../../components/cell/guest'
 import { ExpoIcon, ExpoIconName } from '../../components/ui/expo-icon'
@@ -118,17 +118,21 @@ function InvitationShow({ invitation }: InvitationShowProps) {
             <HStack alignItems='center' space={2}>
               <Icon
                 as={<ExpoIcon name='Feather/users' />}
-                size='lg'
-                color='text.50'
+                size='md'
               />
-              <Heading fontSize='lg'>
+              <Text fontSize='lg'>
                 Lista de convidados
-              </Heading>
+              </Text>
             </HStack>
             <Divider mb={4} mt={2} />
             <VStack space={4}>
               {Object.entries(guests).map(([guestId, guest]) =>
-                <GuestCell key={guestId} guest={guest} />
+                <GuestCell
+                  key={guestId}
+                  guest={guest}
+                  guestId={guestId}
+                  invitationId={id}
+                />
               )}
             </VStack>
           </Box>
@@ -152,7 +156,7 @@ function IconInfo({ info, icon }: { info: string, icon: ExpoIconName }) {
     <HStack space={2} alignItems='center'>
       <Icon
         as={<ExpoIcon name={icon} />}
-        size={5}
+        size='md'
       />
       <Text fontSize='md'>{info}</Text>
     </HStack>

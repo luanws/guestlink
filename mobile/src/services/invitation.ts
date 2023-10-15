@@ -60,13 +60,20 @@ export namespace InvitationService {
         await removeInvitationId(id)
     }
 
-    async function getShareLink(id: string): Promise<string> {
-        const { data: { shareLink } } = await api.get(`/invitation/${id}/share`)
+    async function getShareLink(id: string, guestId?: string): Promise<string> {
+        const { data: { shareLink } } = await api.get(`/invitation/${id}/share`, {
+            params: { guestId },
+        })
         return shareLink
     }
 
     export async function shareInvitation(id: string) {
         const shareLink = await getShareLink(id)
+        await Share.share({ message: shareLink })
+    }
+
+    export async function shareInvitationToExistingGuest(id: string, guestId: string) {
+        const shareLink = await getShareLink(id, guestId)
         await Share.share({ message: shareLink })
     }
 }
