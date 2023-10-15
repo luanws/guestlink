@@ -8,10 +8,10 @@ export const lightColors = {
     tint: '#2f95dc',
     tabIconDefault: '#ccc',
     tabIconSelected: '#2f95dc',
-    statusBar: '#fff',
+    statusBar: lightPalette.Primary['900'],
     contentBackground: '#f2f2f2',
-    headerTint: '#18181b',
-    headerBackground: '#f4f4f5',
+    headerTint: 'white',
+    headerBackground: lightPalette.Primary['900'],
     tabBarActiveTint: '#2f95dc',
     tabBarInactiveTint: '#ccc',
 }

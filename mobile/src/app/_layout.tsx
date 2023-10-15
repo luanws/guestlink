@@ -24,7 +24,7 @@ function StackScreens() {
           backgroundColor: colors.headerBackground,
         },
         headerTintColor: colors.headerTint,
-        statusBarStyle: colorScheme === 'dark' ? 'light' : 'dark',
+        statusBarStyle: 'light',
         statusBarColor: colors.statusBar,
       }}
     >
