@@ -1,13 +1,17 @@
-import { Actionsheet, HStack, Icon, ScrollView, Text, VStack } from 'native-base'
+import { Actionsheet, Box, HStack, Icon, Input, ScrollView, Text, VStack } from 'native-base'
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { ExpoIcon } from '../components/ui/expo-icon'
+import { useApi } from '../providers/api'
 import { useTheme } from '../providers/theme'
 
 export default function () {
   return (
     <ScrollView>
-      <ThemeSettings />
+      <VStack padding={8} space={8}>
+        <ThemeSettings />
+        <ApiSettings />
+      </VStack>
     </ScrollView>
   )
 }
@@ -23,12 +27,7 @@ function ThemeSettings() {
   }
 
   return (
-    <VStack
-      paddingX={8}
-      paddingY={4}
-      space={4}
-    >
-
+    <>
       <TouchableOpacity onPress={() => setIsOpenThemeActionSheet(true)}>
         <HStack alignItems='center' space={4}>
           <Icon
@@ -62,7 +61,31 @@ function ThemeSettings() {
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
+    </>
+  )
+}
 
+function ApiSettings() {
+  if (!__DEV__) return <Box my={-4} />
+
+  const { apiUrl, setApiUrl, restoreDefaultApiUrl, defaultApiUrl } = useApi()
+  const [inputApiUrl, setInputApiUrl] = useState<string>(apiUrl == defaultApiUrl ? '' : apiUrl)
+
+  return (
+    <VStack space={4}>
+      <Text fontSize='xl'>API</Text>
+      <Input
+        placeholder={defaultApiUrl}
+        value={inputApiUrl}
+        onChangeText={setInputApiUrl}
+        onSubmitEditing={({ nativeEvent: { text } }) => {
+          if (text) {
+            setApiUrl(text)
+          } else {
+            restoreDefaultApiUrl()
+          }
+        }}
+      />
     </VStack>
   )
 }
