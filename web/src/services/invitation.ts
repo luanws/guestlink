@@ -55,7 +55,11 @@ export async function createInvitation(newInvitation: NewInvitation): Promise<In
 
 export async function deleteInvitation(id: string): Promise<void> {
     await firebase.database().ref(`invitations/${id}`).remove()
-    await firebase.storage().bucket().file(`invitations/${id}.jpg`).delete()
+    const invitationImageFileRef = firebase.storage().bucket().file(`invitations/${id}.jpg`)
+    const [imageFileExists] = await invitationImageFileRef.exists()
+    if (imageFileExists) {
+        await invitationImageFileRef.delete()
+    }
 }
 
 export async function deleteGuest({ invitationId, guestId }: {
