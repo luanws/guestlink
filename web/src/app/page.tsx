@@ -38,7 +38,7 @@ function DownloadApp() {
         height={200}
         alt='QR Code'
       />
-      <Link href='exp://u.expo.dev/update/e331013c-e978-4ad3-b11e-822daa144659'>
+      <Link href='https://expo.dev/accounts/luanws/projects/invitation-maker/builds/f82430db-7401-43a2-a27b-cf99ce0e5f87'>
         <Image
           src={'images/download-app-android-google-play.svg'}
           width={200}
