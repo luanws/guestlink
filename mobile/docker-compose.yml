@@ -1,6 +1,6 @@
 version: "3.9"
 
-name: "invitation-maker-expo-app"
+name: "guestlink-expo-app"
 
 services:
   android:
