@@ -40,14 +40,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "35ff00fa-ba1c-4dbf-86c3-8f6d8e4fc60b"
+        "projectId": "52ab9353-0ed1-4d39-a589-af29696fbfbb"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
+    "owner": "luanws",
     "updates": {
-      "url": "https://u.expo.dev/35ff00fa-ba1c-4dbf-86c3-8f6d8e4fc60b"
+      "url": "https://u.expo.dev/52ab9353-0ed1-4d39-a589-af29696fbfbb"
     }
   }
 }
