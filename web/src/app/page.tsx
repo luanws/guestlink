@@ -16,7 +16,7 @@ export default async function () {
 function Title() {
   return (
     <h1 className='text-4xl font-bold'>
-      Invitation maker
+      Guestlink
     </h1>
   )
 }
@@ -24,7 +24,7 @@ function Title() {
 function InfoText() {
   return (
     <div>
-      Invitation maker é um aplicativo de criação e gerenciamento de convites para eventos.
+      Guestlink é um aplicativo de criação e gerenciamento de convites para eventos.
     </div>
   )
 }
@@ -38,7 +38,7 @@ function DownloadApp() {
         height={200}
         alt='QR Code'
       />
-      <Link href='https://expo.dev/accounts/luanws/projects/invitation-maker/builds/f82430db-7401-43a2-a27b-cf99ce0e5f87'>
+      <Link href='https://expo.dev/accounts/luanws/projects/guestlink/builds/f82430db-7401-43a2-a27b-cf99ce0e5f87'>
         <Image
           src={'images/download-app-android-google-play.svg'}
           width={200}

@@ -6,7 +6,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Invitation maker',
+  title: 'Guestlink',
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
