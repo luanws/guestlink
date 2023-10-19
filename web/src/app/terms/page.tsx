@@ -1,7 +1,7 @@
 import Markdown from 'react-markdown'
 
 export const metadata = {
-  title: 'Política de privacidade'
+  title: 'Termos de uso'
 }
 
 export default function () {
