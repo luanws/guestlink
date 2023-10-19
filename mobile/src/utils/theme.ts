@@ -22,7 +22,7 @@ export const darkColors: ColorsType = {
     tint: '#fff',
     tabIconDefault: '#ccc',
     tabIconSelected: '#fff',
-    statusBar: '#262628',
+    statusBar: '#27272a',
     contentBackground: '#18181b',
     headerTint: '#f4f4f5',
     headerBackground: '#27272a',
