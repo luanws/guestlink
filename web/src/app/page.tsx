@@ -33,12 +33,12 @@ function DownloadApp() {
   return (
     <div className='flex flex-col items-center justify-center gap-2'>
       <Image
-        src={'images/android-app-qrcode.svg'}
+        src={'/images/android-app-qrcode.png'}
         width={200}
         height={200}
         alt='QR Code'
       />
-      <Link href='https://expo.dev/accounts/luanws/projects/guestlink/builds/f82430db-7401-43a2-a27b-cf99ce0e5f87'>
+      <Link href='https://play.google.com/store/apps/details?id=com.luanws.guestlink'>
         <Image
           src={'images/download-app-android-google-play.svg'}
           width={200}
