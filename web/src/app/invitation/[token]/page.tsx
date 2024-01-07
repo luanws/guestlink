@@ -26,6 +26,7 @@ export default async function ({ params: { token } }: Props) {
   const invitation = await InvitationService.getInvitationById(invitationId)
   const guest: Guest | undefined = invitation.guests?.[linkId]
   const { address, date, eventName, imageUri, name, time } = invitation
+  const hasGuests = guestLimit !== 0
 
   return (
     <div className='w-full min-h-screen flex flex-col items-center justify-center'>
@@ -50,7 +51,8 @@ export default async function ({ params: { token } }: Props) {
           <span className='font-bold text-blue-600 dark:text-blue-400'>
             {name.toUpperCase()}
           </span>.
-          Por favor, confirme sua presença e informe os nomes dos seus acompanhantes.
+          {hasGuests && 'Por favor, confirme sua presença e informe os nomes dos seus acompanhantes.'}
+          {!hasGuests && 'Por favor, confirme sua presença.'}
         </p>
 
         <div className='flex flex-col gap-6'>
