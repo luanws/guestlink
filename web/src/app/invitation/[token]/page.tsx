@@ -9,6 +9,7 @@ import { InvitationGuestForm } from './form'
 interface TokenPayload {
   invitationId: string
   linkId: string
+  guestLimit?: number
 }
 
 interface Params {
@@ -20,7 +21,7 @@ interface Props {
 }
 
 export default async function ({ params: { token } }: Props) {
-  const { invitationId, linkId } = jwt.verify(token) as TokenPayload
+  const { invitationId, linkId, guestLimit } = jwt.verify(token) as TokenPayload
 
   const invitation = await InvitationService.getInvitationById(invitationId)
   const guest: Guest | undefined = invitation.guests?.[linkId]
@@ -63,6 +64,7 @@ export default async function ({ params: { token } }: Props) {
           invitationId={invitationId}
           guestId={linkId}
           guest={guest}
+          guestLimit={guestLimit}
         />
 
       </div>

@@ -33,9 +33,10 @@ interface InvitationGuestFormProps {
   invitationId: string
   guestId: string
   guest?: Guest
+  guestLimit?: number
 }
 
-export function InvitationGuestForm({ invitationId, guestId, guest }: InvitationGuestFormProps) {
+export function InvitationGuestForm({ invitationId, guestId, guest, guestLimit }: InvitationGuestFormProps) {
   const [numberOfCompanions, setNumberOfCompanions] = useState<number>(guest?.companions?.length ?? 0)
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false)
@@ -118,52 +119,59 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
           )}
         />
 
-        <FormLabel>
-          Quantos acompanhantes vão com você?
-        </FormLabel>
-        <div className='flex items-center justify-center gap-12'>
-          <Button
-            type='button'
-            variant='secondary'
-            disabled={numberOfCompanions === 0}
-            onClick={() => removeCompanion()}
-          >
-            <MinusIcon />
-          </Button>
-          <div className='text-3xl'>
-            {numberOfCompanions}
-          </div>
-          <Button
-            type='button'
-            variant='secondary'
-            onClick={() => addCompanion()}
-          >
-            <PlusIcon />
-          </Button>
-        </div>
+        {(guestLimit === undefined || guestLimit > 0) && (
+          <>
 
-        <div className='flex flex-col gap-4'>
-          {Array.from({ length: numberOfCompanions }).map((_, index) => (
-            <FormField
-              key={index}
-              control={form.control}
-              name={`companions[${index}]` as any}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome do acompanhante {index + 1}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Digite o nome do acompanhante aqui...'
-                      autoCapitalize='words'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
+            <FormLabel>
+              Quantos acompanhantes vão com você?
+            </FormLabel>
+            <div className='flex items-center justify-center gap-12'>
+              <Button
+                type='button'
+                variant='secondary'
+                disabled={numberOfCompanions <= 0}
+                onClick={() => removeCompanion()}
+              >
+                <MinusIcon />
+              </Button>
+              <div className='text-3xl'>
+                {numberOfCompanions}
+              </div>
+              <Button
+                type='button'
+                variant='secondary'
+                disabled={guestLimit ? numberOfCompanions >= guestLimit : false}
+                onClick={() => addCompanion()}
+              >
+                <PlusIcon />
+              </Button>
+            </div>
+
+            <div className='flex flex-col gap-4'>
+              {Array.from({ length: numberOfCompanions }).map((_, index) => (
+                <FormField
+                  key={index}
+                  control={form.control}
+                  name={`companions[${index}]` as any}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome do acompanhante {index + 1}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='Digite o nome do acompanhante aqui...'
+                          autoCapitalize='words'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+
+          </>
+        )}
 
         <div className='flex items-center gap-4 flex-wrap'>
           {isUpdate && (
