@@ -5,16 +5,16 @@ import { v4 as uuid } from 'uuid'
 
 interface Params {
     invitationAuthorizationKey: string
-    guestLimit?: string
 }
 
 export async function GET(request: NextRequest, { params }: { params: Params }) {
-    const { invitationAuthorizationKey, guestLimit } = params
+    const { invitationAuthorizationKey } = params
 
     const id = decrypt(invitationAuthorizationKey)
 
     const baseUrl = request.nextUrl.origin
     const guestId = request.nextUrl.searchParams.get('guestId')
+    const guestLimit = request.nextUrl.searchParams.get('guestLimit')
 
     const linkId = guestId ?? uuid()
 
