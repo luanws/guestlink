@@ -1,8 +1,8 @@
 import { HStack, Icon, IconButton, Text, VStack } from 'native-base'
+import { TouchableOpacity } from 'react-native'
 import { Guest } from '../../models/guest'
 import { InvitationService } from '../../services/invitation'
 import { ExpoIcon } from '../ui/expo-icon'
-import { TouchableOpacity } from 'react-native'
 
 interface GuestCellProps {
   guest: Guest
@@ -14,11 +14,11 @@ export function GuestCell({ guest, guestId, invitationAuthKey }: GuestCellProps)
   const { name, companions } = guest
 
   async function handleShare() {
-    await InvitationService.shareInvitationToExistingGuest(invitationAuthKey, guestId)
+    await InvitationService.shareInvitation(invitationAuthKey, { guestId })
   }
 
   async function handleEdit() {
-    await InvitationService.editGuestInBrowser(invitationAuthKey, guestId)
+    await InvitationService.editGuestInBrowser(invitationAuthKey, { guestId })
   }
 
   return (

@@ -1,5 +1,5 @@
 import { router, useGlobalSearchParams } from 'expo-router'
-import { AlertDialog, Box, Button, Center, Divider, HStack, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
+import { AlertDialog, Box, Button, Center, Divider, HStack, Heading, Icon, IconButton, Image, ScrollView, Text, VStack } from 'native-base'
 import { useEffect, useRef, useState } from 'react'
 import { GuestCell } from '../../components/cell/guest'
 import { ExpoIcon, ExpoIconName } from '../../components/ui/expo-icon'
@@ -46,6 +46,7 @@ function InvitationShow({ invitation, invitationAuthKey }: {
         <EventNameText eventName={eventName} />
         <IconInfoList invitation={invitation} />
         <ActionButtonList invitationAuthKey={invitationAuthKey} />
+        <CustomShare invitationAuthKey={invitationAuthKey} />
         <GuestList invitationAuthKey={invitationAuthKey} guests={guests} />
       </VStack>
     </VStack>
@@ -207,6 +208,87 @@ function DeleteInvitationButton({ invitationAuthKey }: { invitationAuthKey: stri
         </AlertDialog.Content>
       </AlertDialog>
     </Center>
+  )
+}
+
+function CustomShare({ invitationAuthKey }: { invitationAuthKey: string }) {
+  const [guestLimit, setGuestLimit] = useState<number>(0)
+
+  async function handleShare() {
+    await InvitationService.shareInvitation(invitationAuthKey, { guestLimit })
+  }
+
+  function decrementGuestLimit() {
+    if (guestLimit > 0) setGuestLimit(guestLimit - 1)
+  }
+
+  function incrementGuestLimit() {
+    setGuestLimit(guestLimit + 1)
+  }
+
+  return (
+    <VStack
+      space={4}
+      borderWidth={0.5}
+      _light={{
+        borderColor: 'muted.200',
+        backgroundColor: 'white'
+      }}
+      _dark={{
+        backgroundColor: 'muted.800',
+        borderColor: 'transparent',
+      }}
+      borderRadius={8}
+      padding={4}
+      overflow='hidden'
+    >
+      <Heading
+        size='sm'
+      >Link personalizado</Heading>
+
+      <Text fontSize='md'>
+        Limite de convidados
+      </Text>
+
+      <HStack
+        alignItems='center'
+        justifyContent='center'
+        space={2}
+      >
+        <IconButton
+          onPress={() => decrementGuestLimit()}
+          disabled={guestLimit === 0}
+          icon={
+            <Icon
+              as={<ExpoIcon name='MaterialIcons/remove' />}
+              size={5}
+              color={guestLimit === 0 ? 'muted.500' : 'danger.500'}
+            />
+          }
+        />
+        <Text fontSize='md' fontWeight='bold'>
+          {guestLimit}
+        </Text>
+        <IconButton
+          onPress={() => incrementGuestLimit()}
+          icon={
+            <Icon
+              as={<ExpoIcon name='MaterialIcons/add' />}
+              size={5}
+              color='success.500'
+            />
+          }
+        />
+      </HStack>
+
+      <Button
+        onPress={() => handleShare()}
+        colorScheme='primary'
+        size='md'
+      >
+        Compartilhar link
+      </Button>
+    </VStack>
   )
 }
 

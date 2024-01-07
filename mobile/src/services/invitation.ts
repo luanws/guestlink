@@ -87,25 +87,25 @@ export namespace InvitationService {
         await removeInvitationAuthKey(authKey)
     }
 
-    async function getShareLink(id: string, guestId?: string): Promise<string> {
+    interface ShareLinkParams {
+        guestId?: string
+        guestLimit?: number
+    }
+
+    async function getShareLink(id: string, { guestId, guestLimit }: ShareLinkParams = {}): Promise<string> {
         const { data: { shareLink } } = await api.get(`/invitation/${id}/share`, {
-            params: { guestId },
+            params: { guestId, guestLimit },
         })
         return shareLink
     }
 
-    export async function shareInvitation(authKey: string) {
-        const shareLink = await getShareLink(authKey)
+    export async function shareInvitation(authKey: string, params: ShareLinkParams = {}) {
+        const shareLink = await getShareLink(authKey, params)
         await Share.share({ message: shareLink })
     }
 
-    export async function shareInvitationToExistingGuest(id: string, guestId: string) {
-        const shareLink = await getShareLink(id, guestId)
-        await Share.share({ message: shareLink })
-    }
-
-    export async function editGuestInBrowser(id: string, guestId: string) {
-        const shareLink = await getShareLink(id, guestId)
+    export async function editGuestInBrowser(id: string, params: ShareLinkParams = {}) {
+        const shareLink = await getShareLink(id, params)
         Linking.openURL(shareLink)
     }
 }
