@@ -35,8 +35,6 @@ export namespace InvitationService {
         return data
     }
 
-
-
     export async function getUserInvitations(): Promise<InvitationWithAuthKey[]> {
         const authKeys = await getSavedInvitationAuthKey()
         const invitations = await Promise.all(authKeys.map(async authKey => {
@@ -66,6 +64,22 @@ export namespace InvitationService {
         const { data } = await api.post('/invitation', formData)
         const { invitationAuthorizationKey } = data
         await addInvitationAuthKey(invitationAuthorizationKey)
+    }
+
+    export async function updateInvitation(invitation: NewInvitation, authKey: string) {
+        const formData = new FormData()
+        const { imageUri, ...rest } = invitation
+        formData.append('rest', JSON.stringify(rest))
+
+        if (imageUri) {
+            formData.append('image', {
+                uri: imageUri,
+                name: 'imagem.jpg',
+                type: 'image/jpeg',
+            } as any)
+        }
+
+        await api.put(`/invitation/${authKey}`, formData)
     }
 
     export async function deleteInvitation(authKey: string) {

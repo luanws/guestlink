@@ -117,6 +117,7 @@ function ActionButtonList({ invitationAuthKey }: { invitationAuthKey: string }) 
   return (
     <HStack justifyContent='space-around'>
       <ShareButton invitationAuthKey={invitationAuthKey} />
+      <EditInvitationButton invitationAuthKey={invitationAuthKey} />
       <DeleteInvitationButton invitationAuthKey={invitationAuthKey} />
     </HStack>
   )
@@ -136,6 +137,25 @@ function ShareButton({ invitationAuthKey }: { invitationAuthKey: string }) {
           size={6}
           color='Primary.500'
           _dark={{ color: 'Primary.400' }}
+        />
+      }
+    />
+  )
+}
+
+function EditInvitationButton({ invitationAuthKey }: { invitationAuthKey: string }) {
+  async function handleEdit() {
+    router.push(`/invitation/edit/${invitationAuthKey}`)
+  }
+
+  return (
+    <IconButton
+      onPress={handleEdit}
+      icon={
+        <Icon
+          as={<ExpoIcon name='MaterialIcons/edit' />}
+          size={6}
+          color='warning.500'
         />
       }
     />

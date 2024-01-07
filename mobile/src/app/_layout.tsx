@@ -28,6 +28,7 @@ function StackScreens() {
         statusBarColor: colors.statusBar,
       }}
     >
+
       <Stack.Screen
         name='index'
         options={{
@@ -35,24 +36,35 @@ function StackScreens() {
           headerShown: false
         }}
       />
+
       <Stack.Screen
         name='new-invitation'
         options={{
           title: 'Novo convite',
         }}
       />
+
       <Stack.Screen
         name='settings'
         options={{
           title: 'Configurações',
         }}
       />
+
       <Stack.Screen
         name='invitation/[invitationAuthKey]'
         options={{
           title: 'Convite',
         }}
       />
+
+      <Stack.Screen
+        name='invitation/edit/[invitationAuthKey]'
+        options={{
+          title: 'Edição de convite',
+        }}
+      />
+
     </Stack>
   )
 }

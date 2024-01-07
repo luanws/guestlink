@@ -15,6 +15,38 @@ export async function getInvitationById(id: string): Promise<Invitation> {
     return invitation
 }
 
+async function uploadInvitationImage({ invitationId, imageFile }: { invitationId: string, imageFile: File }): Promise<string> {
+    const bucket = firebase.storage().bucket()
+    const storageFile = bucket.file(`invitations/${invitationId}.jpg`)
+    const blobStream = storageFile.createWriteStream({
+        metadata: {
+            contentType: imageFile.type
+        }
+    })
+
+    await new Promise((resolve, reject) => {
+        imageFile.arrayBuffer().then((buffer) => {
+            blobStream.on('error', reject)
+            blobStream.on('finish', resolve)
+            blobStream.end(Buffer.from(buffer))
+        })
+    })
+
+    await storageFile.makePublic()
+    const imageUri = storageFile.publicUrl()
+    return imageUri
+}
+
+async function deleteInvitationImage(invitationId: string): Promise<boolean> {
+    const invitationImageFileRef = firebase.storage().bucket().file(`invitations/${invitationId}.jpg`)
+    const [imageFileExists] = await invitationImageFileRef.exists()
+    if (imageFileExists) {
+        await invitationImageFileRef.delete()
+        return true
+    }
+    return false
+}
+
 export async function createInvitation(newInvitation: NewInvitation): Promise<Invitation> {
     const id = uuid()
     const invitationRef = firebase.database().ref('invitations').child(id)
@@ -24,24 +56,7 @@ export async function createInvitation(newInvitation: NewInvitation): Promise<In
     const { imageFile, ...newInvitationRest } = newInvitation
     let imageUri: string | null = null
     if (imageFile) {
-        const bucket = firebase.storage().bucket()
-        const storageFile = bucket.file(`invitations/${invitationId}.jpg`)
-        const blobStream = storageFile.createWriteStream({
-            metadata: {
-                contentType: imageFile.type
-            }
-        })
-
-        await new Promise((resolve, reject) => {
-            imageFile.arrayBuffer().then((buffer) => {
-                blobStream.on('error', reject)
-                blobStream.on('finish', resolve)
-                blobStream.end(Buffer.from(buffer))
-            })
-        })
-
-        await storageFile.makePublic()
-        imageUri = storageFile.publicUrl()
+        imageUri = await uploadInvitationImage({ invitationId, imageFile })
         await invitationRef.update({ imageUri })
     }
 
@@ -59,6 +74,19 @@ export async function deleteInvitation(id: string): Promise<void> {
     const [imageFileExists] = await invitationImageFileRef.exists()
     if (imageFileExists) {
         await invitationImageFileRef.delete()
+    }
+}
+
+export async function updateInvitation(invitationId: string, newInvitation: NewInvitation): Promise<void> {
+    const invitationRef = firebase.database().ref(`invitations/${invitationId}`)
+    const { imageFile, ...newInvitationRest } = newInvitation
+    await deleteInvitationImage(invitationId)
+    await invitationRef.update(newInvitationRest)
+
+    let imageUri: string | null = null
+    if (imageFile) {
+        imageUri = await uploadInvitationImage({ invitationId, imageFile })
+        await invitationRef.update({ imageUri })
     }
 }
 
