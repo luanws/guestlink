@@ -244,11 +244,7 @@ function CustomShare({ invitationAuthKey }: { invitationAuthKey: string }) {
     >
       <Heading
         size='sm'
-      >Link personalizado</Heading>
-
-      <Text fontSize='md'>
-        Limite de convidados
-      </Text>
+      >Link com limite de acompanhantes</Heading>
 
       <HStack
         alignItems='center'
