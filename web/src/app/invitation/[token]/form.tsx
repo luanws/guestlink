@@ -22,7 +22,6 @@ const formSchema = z.object({
       .min(2, 'O nome deve ter pelo menos 2 caracteres')
       .max(255, 'O nome deve ter no máximo 255 caracteres')
       .regex(/^([a-zA-ZÀ-ú]+)\s+([a-zA-ZÀ-ú]+(\s+)?)+$/, 'Digite o nome completo do acompanhante')
-      .optional()
   ).optional().transform(companions => companions?.filter(Boolean)),
 })
 
@@ -69,7 +68,7 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
     setIsSubmitLoading(true)
     try {
       const guestName = normalizeName(data.guestName)
-      const companions = data.companions?.slice(0, numberOfCompanions).filter(Boolean).map(x => normalizeName(x!)) ?? []
+      const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
       const guest: Guest = { name: guestName, companions }
       await InvitationService.setGuest({ invitationId, guest, guestId })
       router.replace('/invitation/success')
@@ -80,11 +79,17 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
 
   function addCompanion() {
     setNumberOfCompanions(numberOfCompanions + 1)
+    const companions = form.getValues('companions')
+    companions?.push('')
+    form.setValue('companions', companions)
   }
 
   function removeCompanion() {
     if (numberOfCompanions > 0) {
       setNumberOfCompanions(numberOfCompanions - 1)
+      const companions = form.getValues('companions')
+      companions?.pop()
+      form.setValue('companions', companions)
     }
   }
 
