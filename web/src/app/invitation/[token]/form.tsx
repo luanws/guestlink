@@ -22,7 +22,8 @@ const formSchema = z.object({
       .min(2, 'O nome deve ter pelo menos 2 caracteres')
       .max(255, 'O nome deve ter no máximo 255 caracteres')
       .regex(/^([a-zA-ZÀ-ú]+)\s+([a-zA-ZÀ-ú]+(\s+)?)+$/, 'Digite o nome completo do acompanhante')
-  ).optional(),
+      .optional()
+  ).optional().transform(companions => companions?.filter(Boolean)),
 })
 
 function normalizeName(name: string): string {
@@ -68,7 +69,7 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
     setIsSubmitLoading(true)
     try {
       const guestName = normalizeName(data.guestName)
-      const companions = data.companions?.slice(0, numberOfCompanions).map(normalizeName) ?? []
+      const companions = data.companions?.slice(0, numberOfCompanions).filter(Boolean).map(x => normalizeName(x!)) ?? []
       const guest: Guest = { name: guestName, companions }
       await InvitationService.setGuest({ invitationId, guest, guestId })
       router.replace('/invitation/success')
@@ -77,11 +78,21 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
     }
   }
 
+  function addCompanion() {
+    setNumberOfCompanions(numberOfCompanions + 1)
+  }
+
+  function removeCompanion() {
+    if (numberOfCompanions > 0) {
+      setNumberOfCompanions(numberOfCompanions - 1)
+    }
+  }
+
   return (
     <Form {...form}>
       <form
         className='flex flex-col gap-6'
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit, console.error)}
       >
 
         <FormField
@@ -110,11 +121,7 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
             type='button'
             variant='secondary'
             disabled={numberOfCompanions === 0}
-            onClick={() => {
-              if (numberOfCompanions > 0) {
-                setNumberOfCompanions(numberOfCompanions - 1)
-              }
-            }}
+            onClick={() => removeCompanion()}
           >
             <MinusIcon />
           </Button>
@@ -124,7 +131,7 @@ export function InvitationGuestForm({ invitationId, guestId, guest }: Invitation
           <Button
             type='button'
             variant='secondary'
-            onClick={() => setNumberOfCompanions(numberOfCompanions + 1)}
+            onClick={() => addCompanion()}
           >
             <PlusIcon />
           </Button>
