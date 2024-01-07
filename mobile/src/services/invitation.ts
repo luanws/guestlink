@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Share } from 'react-native'
+import { Linking, Share } from 'react-native'
 import { api } from '../lib/api'
 import { Invitation, InvitationWithAuthKey, NewInvitation } from '../models/invitation'
 
@@ -88,5 +88,10 @@ export namespace InvitationService {
     export async function shareInvitationToExistingGuest(id: string, guestId: string) {
         const shareLink = await getShareLink(id, guestId)
         await Share.share({ message: shareLink })
+    }
+
+    export async function editGuestInBrowser(id: string, guestId: string) {
+        const shareLink = await getShareLink(id, guestId)
+        Linking.openURL(shareLink)
     }
 }
