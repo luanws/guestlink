@@ -51,8 +51,8 @@ export default async function ({ params: { token } }: Props) {
           <span className='font-bold text-blue-600 dark:text-blue-400'>
             {name.toUpperCase()}
           </span>.
-          {hasGuests && 'Por favor, confirme sua presença e informe os nomes dos seus acompanhantes.'}
-          {!hasGuests && 'Por favor, confirme sua presença.'}
+          {hasGuests && ' Por favor, confirme sua presença e informe os nomes dos seus acompanhantes.'}
+          {!hasGuests && ' Por favor, confirme sua presença.'}
         </p>
 
         <div className='flex flex-col gap-6'>
